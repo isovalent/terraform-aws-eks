@@ -1,0 +1,167 @@
+// Copyright 2022 Isovalent, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+variable "allow_imdsv1" {
+  default     = false
+  description = "Whether to allow IMDSv1 access (insecure)."
+  type        = bool
+}
+
+variable "ami_owners" {
+  default = [
+    "099720109477", // Canonical
+    "679593333241", // AWS Marketplace
+    "amazon",
+    "self",
+  ]
+  description = "The list of acceptable owners of AMIs to be used for worker nodes."
+  type        = list(string)
+}
+
+variable "aws_load_balancer_controller_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'aws-load-balancer-controller' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "aws_ebs_csi_driver_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'aws-ebs-csi-driver' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "cert_manager_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'cert-manager' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "cluster_autoscaler_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'cluster-autoscaler' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "control_plane_subnet_ids" {
+  default     = []
+  description = "Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used."
+  type        = list(string)
+}
+
+variable "disable_aws_vpc_cni_plugin" {
+  description = "Whether to disable the AWS VPC CNI plugin. Unless running in chaining mode, this should usually be 'true'."
+  type        = bool
+}
+
+variable "echo_server_instance_enabled" {
+  description = "Whether to create an EC2 instance outside the cluster that can act as 'echo-server'."
+  type        = bool
+  default     = false
+}
+
+variable "echo_server_instance_user_data" {
+  default     = ""
+  description = "The user data script to use for the 'echo-server' instance."
+  type        = string
+}
+
+variable "external_dns_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'external-dns' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "include_public_subnets" {
+  default     = true
+  description = "Whether to include public subnets in the list of subnets usable by the EKS cluster."
+  type        = bool
+}
+
+variable "kubernetes_version" {
+  description = "The version of Kubernetes/EKS to use."
+  type        = string
+}
+
+variable "log_shipping_bucket_name" {
+  default     = ""
+  description = "The name of the S3 bucket that will be used to store logs."
+  type        = string
+}
+
+variable "log_shipping_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'log-shipping' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "manage_aws_auth_configmap" {
+  description = "Whether the upstream 'terraform-aws-eks' module should manage the 'kube-system/aws-auth' configmap. If using Flux, this should probably be 'false'. If not, this should probably be set to 'true'."
+  type        = bool
+}
+
+variable "name" {
+  description = "The name of the EKS cluster."
+  type        = string
+}
+
+variable "region" {
+  description = "The region in which to create the EKS cluster."
+  type        = string
+}
+
+variable "self_managed_node_groups" {
+  description = "A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported."
+  type = map(object({
+    ami_name_filter         = string
+    extra_tags              = map(string)
+    instance_type           = string
+    kubelet_extra_args      = string
+    max_nodes               = number
+    min_nodes               = number
+    name                    = string
+    pre_bootstrap_user_data = string
+    root_volume_id          = string
+    root_volume_size        = number
+    root_volume_type        = string
+    subnet_ids              = list(string)
+  }))
+}
+
+variable "tags" {
+  description = "The set of tags to place on the EKS cluster."
+  type        = map(string)
+}
+
+variable "velero_bucket_name" {
+  default     = ""
+  description = "The name of the S3 bucket that will be used to upload Velero backups."
+  type        = string
+}
+
+variable "velero_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'velero' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "The ID of the VPC in which to create the EKS cluster."
+  type        = string
+}
+
+variable "worker_node_additional_policies" {
+  default     = []
+  description = "A list of additional policies to add to worker nodes."
+  type        = list(string)
+}

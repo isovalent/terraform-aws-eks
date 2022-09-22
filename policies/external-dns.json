@@ -1,0 +1,20 @@
+{
+    "Statement": [
+        {
+            "Action": "route53:ChangeResourceRecordSets",
+            "Effect": "Allow",
+            "Resource": "arn:aws:route53:::hostedzone/*",
+            "Sid": "Sid0"
+        },
+        {
+            "Action": [
+                "route53:ListResourceRecordSets",
+                "route53:ListHostedZones"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "Sid1"
+        }
+    ],
+    "Version": "2012-10-17"
+}
