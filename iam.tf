@@ -85,7 +85,77 @@ module "iam_assumable_role_log_shipping" {
   ]
 }
 
-// Creates an IAM policy used for log shipping used for the AWS Load Balancer controller.
+// Creates an IAM policy used for phlare
+resource "aws_iam_policy" "phlare" {
+  count       = length(var.phlare_oidc_fully_qualified_subjects) > 0 ? 1 : 0
+  description = "IAM policy for Phlare for cluster '${var.name}'."
+  name_prefix = "eks-${local.phlare_role_name}"
+  path        = local.iam_path
+  policy      = data.aws_iam_policy_document.phlare[0].json
+  tags        = var.tags
+}
+
+// Used to create the actual IAM policy based on a bunch of variable parameters.
+data "aws_iam_policy_document" "phlare" {
+  count = length(var.phlare_oidc_fully_qualified_subjects) > 0 ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    sid    = "Sid0"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      join("/", [aws_s3_bucket.phlare[0].arn, "*"])
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    sid    = "Sid1"
+
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      aws_s3_bucket.phlare[0].arn,
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    sid    = "Sid2"
+
+    actions = [
+      "sts:AssumeRoleWithWebIdentity",
+    ]
+
+    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.phlare_role_name}",
+    ]
+  }
+}
+
+// Enables a set of Kubernetes service accounts ("fully qualified subjects") to assume the 'log-shipping' IAM role.
+module "iam_assumable_role_phlare" {
+  count   = length(var.phlare_oidc_fully_qualified_subjects) > 0 ? 1 : 0
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version = "5.4.0"
+
+  create_role                   = true
+  provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
+  oidc_fully_qualified_subjects = var.phlare_oidc_fully_qualified_subjects
+  role_name                     = local.phlare_role_name
+  role_policy_arns = [
+    aws_iam_policy.phlare[0].arn,
+  ]
+}
+
+// Creates an IAM policy used for the AWS Load Balancer controller.
 resource "aws_iam_policy" "aws_load_balancer_controller" {
   count       = length(var.aws_load_balancer_controller_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   description = "IAM policy for AWS Load Balancer Controller for cluster '${var.name}'."

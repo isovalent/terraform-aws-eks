@@ -18,6 +18,7 @@ locals {
   cert_manager_role_name                 = "cert-manager-${var.name}"                       // The name of the IAM role to be used by 'cert-manager'.
   cluster_autoscaler_role_name           = "cluster-autoscaler-${var.name}"                 // The name of the IAM role to be used by 'cluster-autoscaler'.
   external_dns_role_name                 = "external-dns-${var.name}"                       // The name of the IAM role to be used by 'external-dns'.
+  phlare_role_name                       = "phlare-${var.name}"                             // The name of the IAM role to be used by Phlare.
   iam_path                               = "/"                                              // The path in which to create IAM resources.
   log_shipping_role_name                 = "log-shipping-${var.name}"                       // The name of the IAM role to be used by any log-shipping component(s).
   path_to_kubeconfig_file                = abspath("${path.module}/${var.name}.kubeconfig") // The path to the kubeconfig file that will be created and output.

@@ -105,6 +105,18 @@ variable "log_shipping_oidc_fully_qualified_subjects" {
   type        = list(string)
 }
 
+variable "phlare_bucket_name" {
+  default     = ""
+  description = "The name of the S3 bucket that will be used by Phlare"
+  type        = string
+}
+
+variable "phlare_oidc_fully_qualified_subjects" {
+  description = "The list of trusted resources which can assume the 'phlare' role using OpenID Connect."
+  default     = []
+  type        = list(string)
+}
+
 variable "manage_aws_auth_configmap" {
   description = "Whether the upstream 'terraform-aws-eks' module should manage the 'kube-system/aws-auth' configmap. If using Flux, this should probably be 'false'. If not, this should probably be set to 'true'."
   type        = bool
