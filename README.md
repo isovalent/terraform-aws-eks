@@ -24,13 +24,13 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_iam_assumable_role_aws_ebs_csi_driver"></a> [iam\_assumable\_role\_aws\_ebs\_csi\_driver](#module\_iam\_assumable\_role\_aws\_ebs\_csi\_driver) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.1.0 |
-| <a name="module_iam_assumable_role_aws_load_balancer_controller"></a> [iam\_assumable\_role\_aws\_load\_balancer\_controller](#module\_iam\_assumable\_role\_aws\_load\_balancer\_controller) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.1.0 |
-| <a name="module_iam_assumable_role_cert_manager"></a> [iam\_assumable\_role\_cert\_manager](#module\_iam\_assumable\_role\_cert\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.1.0 |
-| <a name="module_iam_assumable_role_cluster_autoscaler"></a> [iam\_assumable\_role\_cluster\_autoscaler](#module\_iam\_assumable\_role\_cluster\_autoscaler) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.1.0 |
-| <a name="module_iam_assumable_role_external_dns"></a> [iam\_assumable\_role\_external\_dns](#module\_iam\_assumable\_role\_external\_dns) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.1.0 |
+| <a name="module_iam_assumable_role_aws_ebs_csi_driver"></a> [iam\_assumable\_role\_aws\_ebs\_csi\_driver](#module\_iam\_assumable\_role\_aws\_ebs\_csi\_driver) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
+| <a name="module_iam_assumable_role_aws_load_balancer_controller"></a> [iam\_assumable\_role\_aws\_load\_balancer\_controller](#module\_iam\_assumable\_role\_aws\_load\_balancer\_controller) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
+| <a name="module_iam_assumable_role_cert_manager"></a> [iam\_assumable\_role\_cert\_manager](#module\_iam\_assumable\_role\_cert\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
+| <a name="module_iam_assumable_role_cluster_autoscaler"></a> [iam\_assumable\_role\_cluster\_autoscaler](#module\_iam\_assumable\_role\_cluster\_autoscaler) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
+| <a name="module_iam_assumable_role_external_dns"></a> [iam\_assumable\_role\_external\_dns](#module\_iam\_assumable\_role\_external\_dns) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_log_shipping"></a> [iam\_assumable\_role\_log\_shipping](#module\_iam\_assumable\_role\_log\_shipping) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.1.0 |
+| <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.9.2 |
 | <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | 18.29.0 |
 
 ## Resources
@@ -92,14 +92,14 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="input_external_dns_oidc_fully_qualified_subjects"></a> [external\_dns\_oidc\_fully\_qualified\_subjects](#input\_external\_dns\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'external-dns' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_include_public_subnets"></a> [include\_public\_subnets](#input\_include\_public\_subnets) | Whether to include public subnets in the list of subnets usable by the EKS cluster. | `bool` | `true` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | The version of Kubernetes/EKS to use. | `string` | n/a | yes |
-| <a name="input_log_shipping_bucket_name"></a> [log\_shipping\_bucket\_name](#input\_log\_shipping\_bucket\_name) | The name of the S3 bucket that will be used to store logs. | `string` | n/a | yes |
+| <a name="input_log_shipping_bucket_name"></a> [log\_shipping\_bucket\_name](#input\_log\_shipping\_bucket\_name) | The name of the S3 bucket that will be used to store logs. | `string` | `""` | no |
 | <a name="input_log_shipping_oidc_fully_qualified_subjects"></a> [log\_shipping\_oidc\_fully\_qualified\_subjects](#input\_log\_shipping\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'log-shipping' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_manage_aws_auth_configmap"></a> [manage\_aws\_auth\_configmap](#input\_manage\_aws\_auth\_configmap) | Whether the upstream 'terraform-aws-eks' module should manage the 'kube-system/aws-auth' configmap. If using Flux, this should probably be 'false'. If not, this should probably be set to 'true'. | `bool` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | The name of the EKS cluster. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region in which to create the EKS cluster. | `string` | n/a | yes |
 | <a name="input_self_managed_node_groups"></a> [self\_managed\_node\_groups](#input\_self\_managed\_node\_groups) | A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported. | <pre>map(object({<br>    ami_name_filter         = string<br>    extra_tags              = map(string)<br>    instance_type           = string<br>    kubelet_extra_args      = string<br>    max_nodes               = number<br>    min_nodes               = number<br>    name                    = string<br>    pre_bootstrap_user_data = string<br>    root_volume_id          = string<br>    root_volume_size        = number<br>    root_volume_type        = string<br>    subnet_ids              = list(string)<br>  }))</pre> | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | The set of tags to place on the EKS cluster. | `map(string)` | n/a | yes |
-| <a name="input_velero_bucket_name"></a> [velero\_bucket\_name](#input\_velero\_bucket\_name) | The name of the S3 bucket that will be used to upload Velero backups. | `string` | n/a | yes |
+| <a name="input_velero_bucket_name"></a> [velero\_bucket\_name](#input\_velero\_bucket\_name) | The name of the S3 bucket that will be used to upload Velero backups. | `string` | `""` | no |
 | <a name="input_velero_oidc_fully_qualified_subjects"></a> [velero\_oidc\_fully\_qualified\_subjects](#input\_velero\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'velero' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC in which to create the EKS cluster. | `string` | n/a | yes |
 | <a name="input_worker_node_additional_policies"></a> [worker\_node\_additional\_policies](#input\_worker\_node\_additional\_policies) | A list of additional policies to add to worker nodes. | `list(string)` | `[]` | no |

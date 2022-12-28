@@ -96,36 +96,40 @@ data "aws_subnets" "public" {
 // EKS cluster.
 module "main" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "18.29.0"
+  version = "19.4.2"
 
-  create_aws_auth_configmap = false                                                                                                                           // Create the 'kube-system/aws-auth' configmap as we're using self-managed node groups.
-  cluster_name              = var.name                                                                                                                        // The name of the EKS cluster.
-  cluster_version           = var.kubernetes_version                                                                                                          // The version of EKS to use.
-  control_plane_subnet_ids  = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
-  enable_irsa               = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
-  manage_aws_auth_configmap = false                                                                                                                           // Do not have the upstream module manage the 'aws-auth' configmap as apparently there may be some issues with authentication. 
-  subnet_ids                = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
-  tags                      = var.tags                                                                                                                        // The tags placed on the EKS cluster.
-  vpc_id                    = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
+  create_aws_auth_configmap      = false                                                                                                                           // Create the 'kube-system/aws-auth' configmap as we're using self-managed node groups.
+  cluster_endpoint_public_access = true                                                                                                                            // Enable public access to the Kubernetes API server.
+  cluster_name                   = var.name                                                                                                                        // The name of the EKS cluster.
+  cluster_version                = var.kubernetes_version                                                                                                          // The version of EKS to use.
+  control_plane_subnet_ids       = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
+  enable_irsa                    = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
+  manage_aws_auth_configmap      = false                                                                                                                           // Do not have the upstream module manage the 'aws-auth' configmap as apparently there may be some issues with authentication. 
+  subnet_ids                     = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
+  tags                           = var.tags                                                                                                                        // The tags placed on the EKS cluster.
+  vpc_id                         = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
 
   self_managed_node_groups = { // The set of self-managed node groups.
     for key, g in var.self_managed_node_groups :
     key => {
-      ami_id                       = data.aws_ami.workers[key].image_id                                     // The ID of the AMI to use for worker nodes.
-      create_security_group        = false                                                                  // Don't create a dedicated security group. A common one is used instead.
-      desired_size                 = g.min_nodes                                                            // Set the desired size of the worker group to the minimum.
-      key_name                     = aws_key_pair.ssh_access.key_name                                       // The name of the SSH key to use for the nodes.
-      bootstrap_extra_args         = "--kubelet-extra-args '${g.kubelet_extra_args}'"                       // The set of extra arguments to the bootstrap script. Used to pass extra flags to the kubelet, and namely to set labels and taints.
-      iam_role_additional_policies = var.worker_node_additional_policies                                    // The set of additional policies to add to the worker group IAM role.
-      max_size                     = g.max_nodes                                                            // The maximum size of the worker group.
-      min_size                     = g.min_nodes                                                            // The minimum size of the worker group.
-      name                         = "${var.name}-${g.name}"                                                // Prefix the worker group name with the name of the EKS cluster.
-      instance_type                = g.instance_type                                                        // The instance type to use for worker nodes.
-      pre_bootstrap_user_data      = g.pre_bootstrap_user_data                                              // The pre-bootstrap user data to use for worker nodes.
-      subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
-      tags = merge(g.extra_tags, {                                                                          // The set of tags placed on each worker node.
-        "k8s.io/cluster-autoscaler/enabled"     = "true",                                                   // Required by the cluster autoscaler.
-        "k8s.io/cluster-autoscaler/${var.name}" = "owned",                                                  // Required by the cluster autoscaler.
+      ami_id                = data.aws_ami.workers[key].image_id               // The ID of the AMI to use for worker nodes.
+      create_security_group = false                                            // Don't create a dedicated security group. A common one is used instead.
+      desired_size          = g.min_nodes                                      // Set the desired size of the worker group to the minimum.
+      key_name              = aws_key_pair.ssh_access.key_name                 // The name of the SSH key to use for the nodes.
+      bootstrap_extra_args  = "--kubelet-extra-args '${g.kubelet_extra_args}'" // The set of extra arguments to the bootstrap script. Used to pass extra flags to the kubelet, and namely to set labels and taints.
+      iam_role_additional_policies = {                                         // The set of additional policies to add to the worker group IAM role.
+        for index, arn in var.worker_node_additional_policies :
+        arn => arn
+      }
+      max_size                = g.max_nodes                                                            // The maximum size of the worker group.
+      min_size                = g.min_nodes                                                            // The minimum size of the worker group.
+      name                    = "${var.name}-${g.name}"                                                // Prefix the worker group name with the name of the EKS cluster.
+      instance_type           = g.instance_type                                                        // The instance type to use for worker nodes.
+      pre_bootstrap_user_data = g.pre_bootstrap_user_data                                              // The pre-bootstrap user data to use for worker nodes.
+      subnet_ids              = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
+      tags = merge(g.extra_tags, {                                                                     // The set of tags placed on each worker node.
+        "k8s.io/cluster-autoscaler/enabled"     = "true",                                              // Required by the cluster autoscaler.
+        "k8s.io/cluster-autoscaler/${var.name}" = "owned",                                             // Required by the cluster autoscaler.
       })
       block_device_mappings = {
         (g.root_volume_id) = {
