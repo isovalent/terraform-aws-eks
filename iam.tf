@@ -208,7 +208,7 @@ module "iam_assumable_role_aws_ebs_csi_driver" {
 // Creates an IAM policy for the cluster autoscaler.
 resource "aws_iam_policy" "cluster_autoscaler" {
   count       = length(var.cluster_autoscaler_oidc_fully_qualified_subjects) > 0 ? 1 : 0
-  description = "IAM policy for 'cluster-autoscaler' policy for cluster '${module.main.cluster_id}'"
+  description = "IAM policy for 'cluster-autoscaler' policy for cluster '${module.main.cluster_name}'"
   name_prefix = "eks-${local.cluster_autoscaler_role_name}"
   path        = local.iam_path
   policy      = file(join("/", [path.module, "policies", "cluster-autoscaler.json"]))
@@ -348,7 +348,7 @@ data "aws_iam_policy_document" "velero" {
 module "iam_assumable_role_velero" {
   count   = length(var.velero_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "5.9.2"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")

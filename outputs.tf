@@ -33,7 +33,7 @@ output "external_dns_role_arn" {
 }
 
 output "id" {
-  value = module.main.cluster_id
+  value = module.main.cluster_name
 }
 
 output "log_shipping_bucket_name" {
