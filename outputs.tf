@@ -70,3 +70,7 @@ output "ssh_private_key_pem" {
 output "oidc_provider_arn" {
   value = module.main.oidc_provider_arn
 }
+
+output "cluster_version" {
+  value = module.main.cluster_version
+}
