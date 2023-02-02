@@ -104,7 +104,7 @@ module "main" {
   cluster_version                = var.kubernetes_version                                                                                                          // The version of EKS to use.
   control_plane_subnet_ids       = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
   enable_irsa                    = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
-  manage_aws_auth_configmap      = false                                                                                                                           // Do not have the upstream module manage the 'aws-auth' configmap as apparently there may be some issues with authentication. 
+  manage_aws_auth_configmap      = false                                                                                                                           // Do not have the upstream module manage the 'aws-auth' configmap as apparently there may be some issues with authentication.
   subnet_ids                     = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
   tags                           = var.tags                                                                                                                        // The tags placed on the EKS cluster.
   vpc_id                         = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
@@ -121,15 +121,17 @@ module "main" {
         for index, arn in var.worker_node_additional_policies :
         arn => arn
       }
-      max_size                = g.max_nodes                                                            // The maximum size of the worker group.
-      min_size                = g.min_nodes                                                            // The minimum size of the worker group.
-      name                    = "${var.name}-${g.name}"                                                // Prefix the worker group name with the name of the EKS cluster.
-      instance_type           = g.instance_type                                                        // The instance type to use for worker nodes.
-      pre_bootstrap_user_data = g.pre_bootstrap_user_data                                              // The pre-bootstrap user data to use for worker nodes.
-      subnet_ids              = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
-      tags = merge(g.extra_tags, {                                                                     // The set of tags placed on each worker node.
-        "k8s.io/cluster-autoscaler/enabled"     = "true",                                              // Required by the cluster autoscaler.
-        "k8s.io/cluster-autoscaler/${var.name}" = "owned",                                             // Required by the cluster autoscaler.
+      max_size                     = g.max_nodes                // The maximum size of the worker group.
+      min_size                     = g.min_nodes                // The minimum size of the worker group.
+      name                         = "${var.name}-${g.name}"    // Prefix the worker group name with the name of the EKS cluster.
+      instance_type                = g.instance_type            // The instance type to use for worker nodes.
+      pre_bootstrap_user_data      = g.pre_bootstrap_user_data  // The pre-bootstrap user data to use for worker nodes.
+      post_bootstrap_user_data     = g.post_bootstrap_user_data // The pre-bootstrap user data to use for worker nodes.
+      iam_role_additional_policies = g.iam_role_additional_policies
+      subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
+      tags = merge(g.extra_tags, {                                                                          // The set of tags placed on each worker node.
+        "k8s.io/cluster-autoscaler/enabled"     = "true",                                                   // Required by the cluster autoscaler.
+        "k8s.io/cluster-autoscaler/${var.name}" = "owned",                                                  // Required by the cluster autoscaler.
       })
       block_device_mappings = {
         (g.root_volume_id) = {
