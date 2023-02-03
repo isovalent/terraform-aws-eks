@@ -148,7 +148,7 @@ variable "self_managed_node_groups" {
     root_volume_size             = number
     root_volume_type             = string
     subnet_ids                   = list(string)
-    iam_role_additional_policies = list(string)
+    iam_role_additional_policies = map(string)
   }))
 }
 
