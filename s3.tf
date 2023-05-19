@@ -24,6 +24,16 @@ resource "aws_s3_bucket_acl" "log_shipping" {
   acl    = "private"
   bucket = aws_s3_bucket.log_shipping[0].id
   count  = length(var.log_shipping_oidc_fully_qualified_subjects) > 0 ? 1 : 0 // Only actually create the ACL if a service account used for log shipping has been specified.
+
+  depends_on = [aws_s3_bucket_ownership_controls.log_shipping_ownership_controls]
+}
+
+resource "aws_s3_bucket_ownership_controls" "log_shipping_ownership_controls" {
+  count  = length(var.log_shipping_oidc_fully_qualified_subjects) > 0 ? 1 : 0 // Only actually create the ACL if a service account used for log shipping has been specified.
+  bucket = aws_s3_bucket.log_shipping[0].id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 // Blocks public access to the S3 bucket used for log shipping and to its contents.
@@ -48,6 +58,16 @@ resource "aws_s3_bucket_acl" "phlare" {
   acl    = "private"
   bucket = aws_s3_bucket.phlare[0].id
   count  = length(var.phlare_oidc_fully_qualified_subjects) > 0 ? 1 : 0 // Only actually create the ACL if a service account used for log shipping has been specified.
+
+  depends_on = [aws_s3_bucket_ownership_controls.phlare_ownership_controls]
+}
+
+resource "aws_s3_bucket_ownership_controls" "phlare_ownership_controls" {
+  count  = length(var.phlare_oidc_fully_qualified_subjects) > 0 ? 1 : 0 // Only actually create the ACL if a service account used for log shipping has been specified.
+  bucket = aws_s3_bucket.phlare[0].id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 // Blocks public access to the S3 bucket used for log shipping and to its contents.
@@ -97,6 +117,16 @@ resource "aws_s3_bucket_acl" "velero" {
   acl    = "private"
   bucket = aws_s3_bucket.velero[0].id
   count  = length(var.velero_oidc_fully_qualified_subjects) > 0 ? 1 : 0 // Only actually create the ACL if a service account used for Velero has been specified.
+
+  depends_on = [aws_s3_bucket_ownership_controls.velero_ownership_controls]
+}
+
+resource "aws_s3_bucket_ownership_controls" "velero_ownership_controls" {
+  count  = length(var.velero_oidc_fully_qualified_subjects) > 0 ? 1 : 0 // Only actually create the ACL if a service account used for log shipping has been specified.
+  bucket = aws_s3_bucket.velero[0].id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 // Blocks public access to the S3 bucket used for Velero and to its contents.
