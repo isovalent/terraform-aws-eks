@@ -74,3 +74,7 @@ output "oidc_provider_arn" {
 output "cluster_version" {
   value = module.main.cluster_version
 }
+
+output "cluster_arn" {
+  value = module.main.cluster_arn
+}

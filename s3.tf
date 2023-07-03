@@ -48,9 +48,9 @@ resource "aws_s3_bucket_public_access_block" "log_shipping_block_public_access" 
 
 // Configure the S3 bucket used for log shipping.
 resource "aws_s3_bucket" "phlare" {
-  bucket = var.phlare_bucket_name                                                                             // The name of the bucket.
+  bucket = var.phlare_bucket_name                                                                       // The name of the bucket.
   count  = length(var.phlare_oidc_fully_qualified_subjects) > 0 && var.phlare_bucket_name != "" ? 1 : 0 // Only actually create the bucket if a service account used for log shipping and a bucket name have been specified.
-  tags   = var.tags                                                                                                 // The set of tags to be placed on the bucket.
+  tags   = var.tags                                                                                     // The set of tags to be placed on the bucket.
 }
 
 // Make the bucket and its contents private.
