@@ -101,6 +101,7 @@ module "main" {
   create_aws_auth_configmap      = false                                                                                                                           // Create the 'kube-system/aws-auth' configmap as we're using self-managed node groups.
   cluster_endpoint_public_access = true                                                                                                                            // Enable public access to the Kubernetes API server.
   cluster_name                   = var.name                                                                                                                        // The name of the EKS cluster.
+  cluster_service_ipv4_cidr      = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from. 
   cluster_version                = var.kubernetes_version                                                                                                          // The version of EKS to use.
   control_plane_subnet_ids       = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
   enable_irsa                    = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
