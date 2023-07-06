@@ -53,6 +53,12 @@ variable "cluster_autoscaler_oidc_fully_qualified_subjects" {
   type        = list(string)
 }
 
+variable "cluster_service_ipv4_cidr" {
+  description = "The CIDR block to assign Kubernetes service IP addresses from."
+  default     = null
+  type        = string
+}
+
 variable "control_plane_subnet_ids" {
   default     = []
   description = "Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used."
