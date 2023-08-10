@@ -78,3 +78,7 @@ output "cluster_version" {
 output "cluster_arn" {
   value = module.main.cluster_arn
 }
+
+output "cluster_endpoint" {
+  value = module.main.cluster_endpoint
+}
