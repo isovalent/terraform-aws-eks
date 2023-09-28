@@ -141,7 +141,7 @@ variable "region" {
 variable "self_managed_node_groups" {
   description = "A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported."
   type = map(object({
-    platform                     = string
+    platform                     = optional(string)
     ami_name_filter              = string
     extra_tags                   = map(string)
     instance_type                = string
