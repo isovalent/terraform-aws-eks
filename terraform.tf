@@ -27,5 +27,5 @@ terraform {
       version = "< 4.0.0" // https://github.com/terraform-aws-modules/terraform-aws-eks/issues/2170#issuecomment-1191922960
     }
   }
-  required_version = ">= 1.2.0"
+  required_version = ">= 1.3.0"
 }
