@@ -98,14 +98,14 @@ module "main" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.4.2"
 
-  create_aws_auth_configmap      = false                                                                                                                           // Create the 'kube-system/aws-auth' configmap as we're using self-managed node groups.
+  create_aws_auth_configmap      = true                                                                                                                            // 
   cluster_endpoint_public_access = true                                                                                                                            // Enable public access to the Kubernetes API server.
   cluster_name                   = var.name                                                                                                                        // The name of the EKS cluster.
   cluster_service_ipv4_cidr      = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from. 
   cluster_version                = var.kubernetes_version                                                                                                          // The version of EKS to use.
   control_plane_subnet_ids       = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
   enable_irsa                    = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
-  manage_aws_auth_configmap      = false                                                                                                                           // Do not have the upstream module manage the 'aws-auth' configmap as apparently there may be some issues with authentication.
+  manage_aws_auth_configmap      = true                                                                                                                            // 
   subnet_ids                     = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
   tags                           = var.tags                                                                                                                        // The tags placed on the EKS cluster.
   vpc_id                         = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
@@ -178,25 +178,6 @@ resource "null_resource" "kubeconfig" {
   }
 }
 
-resource "null_resource" "update_aws_auth_configmap" {
-  count = var.manage_aws_auth_configmap ? 1 : 0
-
-  depends_on = [
-    null_resource.kubeconfig,
-  ]
-
-  provisioner "local-exec" {
-    command = <<EOF
-cat <<EOT | kubectl -n kube-system apply -f-
-${module.main.aws_auth_configmap_yaml}
-EOT
-EOF
-    environment = {
-      KUBECONFIG = local.path_to_kubeconfig_file,
-    }
-  }
-}
-
 resource "null_resource" "disable_aws_vpc_cni_plugin" {
   count = var.disable_aws_vpc_cni_plugin ? 1 : 0
 
@@ -213,4 +194,3 @@ EOF
     }
   }
 }
-
