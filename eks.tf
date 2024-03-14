@@ -117,7 +117,7 @@ module "main" {
       ami_id                = data.aws_ami.workers[key].image_id                                                                     // The ID of the AMI to use for worker nodes.
       create_security_group = false                                                                                                  // Don't create a dedicated security group. A common one is used instead.
       desired_size          = g.min_nodes                                                                                            // Set the desired size of the worker group to the minimum.
-      key_name              = aws_key_pair.ssh_access.key_name                                                                       // The name of the SSH key to use for the nodes.
+      key_name              = g.key_name != "" ? g.key_name : aws_key_pair.ssh_access.key_name                                       // The name of the SSH key to use for the nodes.
       bootstrap_extra_args  = g.platform == "bottlerocket" ? g.kubelet_extra_args : "--kubelet-extra-args '${g.kubelet_extra_args}'" // The set of extra arguments to the bootstrap script. Used to pass extra flags to the kubelet, and namely to set labels and taints. For bottlerocket this needs to be a TOML(https://bottlerocket.dev/en/os/1.19.x/api/settings/kubernetes/) since it doesn't use kubelet to pass the args.
       iam_role_additional_policies = {                                                                                               // The set of additional policies to add to the worker group IAM role.
         for index, arn in var.worker_node_additional_policies :
