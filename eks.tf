@@ -110,6 +110,12 @@ module "main" {
   tags                           = var.tags                                                                                                                        // The tags placed on the EKS cluster.
   vpc_id                         = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
 
+  cluster_addons = {
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
+  }
+
   self_managed_node_groups = { // The set of self-managed node groups.
     for key, g in var.self_managed_node_groups :
     key => {
@@ -119,10 +125,15 @@ module "main" {
       desired_size          = g.min_nodes                                                                                            // Set the desired size of the worker group to the minimum.
       key_name              = aws_key_pair.ssh_access.key_name                                                                       // The name of the SSH key to use for the nodes.
       bootstrap_extra_args  = g.platform == "bottlerocket" ? g.kubelet_extra_args : "--kubelet-extra-args '${g.kubelet_extra_args}'" // The set of extra arguments to the bootstrap script. Used to pass extra flags to the kubelet, and namely to set labels and taints. For bottlerocket this needs to be a TOML(https://bottlerocket.dev/en/os/1.19.x/api/settings/kubernetes/) since it doesn't use kubelet to pass the args.
-      iam_role_additional_policies = {                                                                                               // The set of additional policies to add to the worker group IAM role.
-        for index, arn in var.worker_node_additional_policies :
-        arn => arn
-      }
+      iam_role_additional_policies = merge(                                                                                          // The set of additional policies to add to the worker group IAM role.
+        {
+          for index, arn in var.worker_node_additional_policies :
+          arn => arn
+        },
+        {
+          AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+        }
+      )
       max_size                     = g.max_nodes                // The maximum size of the worker group.
       min_size                     = g.min_nodes                // The minimum size of the worker group.
       name                         = "${var.name}-${g.name}"    // Prefix the worker group name with the name of the EKS cluster.
