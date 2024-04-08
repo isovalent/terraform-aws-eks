@@ -82,3 +82,8 @@ output "cluster_arn" {
 output "cluster_endpoint" {
   value = module.main.cluster_endpoint
 }
+
+
+output "oidc_provider_url" {
+  value = module.main.oidc_provider
+}
