@@ -157,6 +157,7 @@ variable "self_managed_node_groups" {
     subnet_ids                   = list(string)
     iam_role_additional_policies = map(string)
     iam_role_use_name_prefix     = optional(bool, true)
+    key_name                     = optional(string)
   }))
 }
 
