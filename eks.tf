@@ -98,14 +98,14 @@ module "main" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.4.2"
 
-  create_aws_auth_configmap      = true                                                                                                                            // 
+  create_aws_auth_configmap      = true                                                                                                                            //
   cluster_endpoint_public_access = true                                                                                                                            // Enable public access to the Kubernetes API server.
   cluster_name                   = var.name                                                                                                                        // The name of the EKS cluster.
-  cluster_service_ipv4_cidr      = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from. 
+  cluster_service_ipv4_cidr      = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from.
   cluster_version                = var.kubernetes_version                                                                                                          // The version of EKS to use.
   control_plane_subnet_ids       = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
   enable_irsa                    = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
-  manage_aws_auth_configmap      = true                                                                                                                            // 
+  manage_aws_auth_configmap      = var.manage_aws_auth_configmap                                                                                                   //
   subnet_ids                     = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
   tags                           = var.tags                                                                                                                        // The tags placed on the EKS cluster.
   vpc_id                         = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
@@ -113,7 +113,7 @@ module "main" {
   self_managed_node_groups = { // The set of self-managed node groups.
     for key, g in var.self_managed_node_groups :
     key => {
-      platform              = coalesce(g.platform, "linux")                                                                          // Platform is optional, linux is used if omitted, also can be bottlerocket or windows https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/docs/user_data.md#user-data--bootstrapping 
+      platform              = coalesce(g.platform, "linux")                                                                          // Platform is optional, linux is used if omitted, also can be bottlerocket or windows https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/docs/user_data.md#user-data--bootstrapping
       ami_id                = data.aws_ami.workers[key].image_id                                                                     // The ID of the AMI to use for worker nodes.
       create_security_group = false                                                                                                  // Don't create a dedicated security group. A common one is used instead.
       desired_size          = g.min_nodes                                                                                            // Set the desired size of the worker group to the minimum.
