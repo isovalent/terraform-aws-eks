@@ -124,6 +124,7 @@ variable "phlare_oidc_fully_qualified_subjects" {
 }
 
 variable "manage_aws_auth_configmap" {
+  default     = true
   description = "Whether the upstream 'terraform-aws-eks' module should manage the 'kube-system/aws-auth' configmap. If using Flux, this should probably be 'false'. If not, this should probably be set to 'true'."
   type        = bool
 }
