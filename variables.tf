@@ -156,7 +156,6 @@ variable "self_managed_node_groups" {
     root_volume_size             = number
     root_volume_type             = string
     subnet_ids                   = list(string)
-    source_dest_check            = optional(bool, true)
     iam_role_additional_policies = map(string)
     iam_role_use_name_prefix     = optional(bool, true)
     key_name                     = optional(string)
