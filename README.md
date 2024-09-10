@@ -8,7 +8,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.31.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.34.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.1.1 |
 | <a name="requirement_tls"></a> [tls](#requirement\_tls) | < 4.0.0 |
 
@@ -16,7 +16,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.31.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.34.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | >= 3.1.1 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | < 4.0.0 |
 
@@ -32,7 +32,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="module_iam_assumable_role_log_shipping"></a> [iam\_assumable\_role\_log\_shipping](#module\_iam\_assumable\_role\_log\_shipping) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_phlare"></a> [iam\_assumable\_role\_phlare](#module\_iam\_assumable\_role\_phlare) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.9.2 |
-| <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | 19.4.2 |
+| <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | ~> 20.0 |
 
 ## Resources
 
@@ -103,12 +103,11 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | The version of Kubernetes/EKS to use. | `string` | n/a | yes |
 | <a name="input_log_shipping_bucket_name"></a> [log\_shipping\_bucket\_name](#input\_log\_shipping\_bucket\_name) | The name of the S3 bucket that will be used to store logs. | `string` | `""` | no |
 | <a name="input_log_shipping_oidc_fully_qualified_subjects"></a> [log\_shipping\_oidc\_fully\_qualified\_subjects](#input\_log\_shipping\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'log-shipping' role using OpenID Connect. | `list(string)` | `[]` | no |
-| <a name="input_manage_aws_auth_configmap"></a> [manage\_aws\_auth\_configmap](#input\_manage\_aws\_auth\_configmap) | Whether the upstream 'terraform-aws-eks' module should manage the 'kube-system/aws-auth' configmap. If using Flux, this should probably be 'false'. If not, this should probably be set to 'true'. | `bool` | `true` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the EKS cluster. | `string` | n/a | yes |
 | <a name="input_phlare_bucket_name"></a> [phlare\_bucket\_name](#input\_phlare\_bucket\_name) | The name of the S3 bucket that will be used by Phlare | `string` | `""` | no |
 | <a name="input_phlare_oidc_fully_qualified_subjects"></a> [phlare\_oidc\_fully\_qualified\_subjects](#input\_phlare\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'phlare' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region in which to create the EKS cluster. | `string` | n/a | yes |
-| <a name="input_self_managed_node_groups"></a> [self\_managed\_node\_groups](#input\_self\_managed\_node\_groups) | A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported. | <pre>map(object({<br>    platform                     = optional(string)<br>    ami_name_filter              = string<br>    extra_tags                   = map(string)<br>    instance_type                = string<br>    kubelet_extra_args           = string<br>    max_nodes                    = number<br>    min_nodes                    = number<br>    name                         = string<br>    pre_bootstrap_user_data      = string<br>    post_bootstrap_user_data     = string<br>    root_volume_id               = string<br>    root_volume_size             = number<br>    root_volume_type             = string<br>    subnet_ids                   = list(string)<br>    iam_role_additional_policies = map(string)<br>    iam_role_use_name_prefix     = optional(bool, true)<br>    key_name                     = optional(string)<br>  }))</pre> | n/a | yes |
+| <a name="input_self_managed_node_groups"></a> [self\_managed\_node\_groups](#input\_self\_managed\_node\_groups) | A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported. | <pre>map(object({<br>    ami_type                     = string<br>    ami_name_filter              = string<br>    extra_tags                   = map(string)<br>    instance_type                = string<br>    kubelet_extra_args           = string<br>    max_nodes                    = number<br>    min_nodes                    = number<br>    name                         = string<br>    pre_bootstrap_user_data      = string<br>    post_bootstrap_user_data     = string<br>    root_volume_id               = string<br>    root_volume_size             = number<br>    root_volume_type             = string<br>    subnet_ids                   = list(string)<br>    iam_role_additional_policies = map(string)<br>    iam_role_use_name_prefix     = optional(bool, true)<br>    key_name                     = optional(string)<br>  }))</pre> | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | The set of tags to place on the EKS cluster. | `map(string)` | n/a | yes |
 | <a name="input_velero_bucket_name"></a> [velero\_bucket\_name](#input\_velero\_bucket\_name) | The name of the S3 bucket that will be used to upload Velero backups. | `string` | `""` | no |
 | <a name="input_velero_oidc_fully_qualified_subjects"></a> [velero\_oidc\_fully\_qualified\_subjects](#input\_velero\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'velero' role using OpenID Connect. | `list(string)` | `[]` | no |
