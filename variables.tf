@@ -123,12 +123,6 @@ variable "phlare_oidc_fully_qualified_subjects" {
   type        = list(string)
 }
 
-variable "manage_aws_auth_configmap" {
-  default     = true
-  description = "Whether the upstream 'terraform-aws-eks' module should manage the 'kube-system/aws-auth' configmap. If using Flux, this should probably be 'false'. If not, this should probably be set to 'true'."
-  type        = bool
-}
-
 variable "name" {
   description = "The name of the EKS cluster."
   type        = string
@@ -142,7 +136,7 @@ variable "region" {
 variable "self_managed_node_groups" {
   description = "A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported."
   type = map(object({
-    platform                     = optional(string)
+    ami_type                     = string
     ami_name_filter              = string
     extra_tags                   = map(string)
     instance_type                = string
