@@ -16,6 +16,10 @@ output "aws_ebs_csi_driver_role_arn" {
   value = length(var.aws_ebs_csi_driver_oidc_fully_qualified_subjects) > 0 ? module.iam_assumable_role_aws_ebs_csi_driver[0].iam_role_arn : ""
 }
 
+output "aws_ebs_csi_driver_policy_arn" {
+  value = length(var.aws_ebs_csi_driver_oidc_fully_qualified_subjects) > 0 ? aws_iam_policy.aws_ebs_csi_driver[0].arn : ""
+}
+
 output "aws_load_balancer_controller_role_arn" {
   value = length(var.aws_load_balancer_controller_oidc_fully_qualified_subjects) > 0 ? module.iam_assumable_role_aws_load_balancer_controller[0].iam_role_arn : ""
 }
