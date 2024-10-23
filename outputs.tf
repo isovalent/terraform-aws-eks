@@ -62,6 +62,10 @@ output "workers_iam_role_arns" {
   ])
 }
 
+output "self_managed_node_groups" {
+  value = module.main.self_managed_node_groups
+}
+
 output "ssh_key_name" {
   value = aws_key_pair.ssh_access.key_name
 }
