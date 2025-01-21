@@ -91,3 +91,8 @@ output "cluster_endpoint" {
 output "oidc_provider_url" {
   value = module.main.oidc_provider
 }
+
+
+output "cluster_certificate_authority_data" {
+  value = module.main.cluster_certificate_authority_data
+}
