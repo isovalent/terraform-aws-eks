@@ -96,3 +96,7 @@ output "oidc_provider_url" {
 output "cluster_certificate_authority_data" {
   value = module.main.cluster_certificate_authority_data
 }
+
+output "cluster_service_ipv4_cidr" {
+  value = module.main.cluster_service_ipv4_cidr
+}

@@ -153,6 +153,10 @@ variable "self_managed_node_groups" {
     iam_role_additional_policies = map(string)
     iam_role_use_name_prefix     = optional(bool, true)
     key_name                     = optional(string)
+    cloudinit_pre_nodeadm = optional(list(object({
+      content_type = string
+      content      = string
+    })))
   }))
 }
 

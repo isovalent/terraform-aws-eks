@@ -154,6 +154,7 @@ module "main" {
         instance_metadata_tags      = "disabled"
         http_tokens                 = var.allow_imdsv1 ? "optional" : "required"
       }
+      cloudinit_pre_nodeadm = g.cloudinit_pre_nodeadm
     }
   }
 }
