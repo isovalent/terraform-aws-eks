@@ -133,6 +133,29 @@ variable "region" {
   type        = string
 }
 
+variable "eks_managed_node_groups" {
+  description = "A map describing the set of managed node groups to create. Other types of node groups besides self-managed are currently not supported."
+  type = map(object({
+    ami_type                     = string
+    ami_name_filter              = string
+    extra_tags                   = map(string)
+    instance_types               = list(string)
+    kubelet_extra_args           = string
+    max_nodes                    = number
+    min_nodes                    = number
+    name                         = string
+    pre_bootstrap_user_data      = string
+    post_bootstrap_user_data     = string
+    root_volume_id               = string
+    root_volume_size             = number
+    root_volume_type             = string
+    subnet_ids                   = list(string)
+    iam_role_additional_policies = map(string)
+    iam_role_use_name_prefix     = optional(bool, true)
+    key_name                     = optional(string)
+  }))
+}
+
 variable "self_managed_node_groups" {
   description = "A map describing the set of self-managed node groups to create. Other types of node groups besides self-managed are currently not supported."
   type = map(object({

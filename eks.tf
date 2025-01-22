@@ -25,6 +25,20 @@ data "aws_ami" "workers" {
   }
 }
 
+data "aws_ami" "workers_managed" {
+  for_each    = var.eks_managed_node_groups
+  most_recent = true
+  owners      = var.ami_owners
+  filter {
+    name = "name"
+    values = [
+      each.value.ami_name_filter
+    ]
+  }
+}
+
+
+
 // Used to make sure the VPC has been created and introduce proper dependencies between 'data' blocks.
 data "aws_vpc" "vpc" {
   id = var.vpc_id
@@ -108,8 +122,52 @@ module "main" {
   enable_irsa                              = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
   subnet_ids                               = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
   tags                                     = var.tags                                                                                                                        // The tags placed on the EKS cluster.
-  vpc_id                                   = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
-
+  vpc_id                                   = data.aws_vpc.vpc.id
+  eks_managed_node_groups = {
+    for key, g in var.eks_managed_node_groups :
+    key => {
+      ami_type             = g.ami_type                                                                                                    // The AMI family to use for worker nodes, "AL2_x86_64" etc. https://docs.aws.amazon.com/eks/latest/APIReference/API_CreateNodegroup.html#API_CreateNodegroup_RequestBody
+      ami_id               = data.aws_ami.workers_managed[key].image_id                                                                    // The ID of the AMI to use for worker nodes.
+      desired_size         = g.min_nodes                                                                                                   // Set the desired size of the worker group to the minimum.
+      key_name             = g.key_name != "" ? g.key_name : aws_key_pair.ssh_access.key_name                                              // The name of the SSH key to use for the nodes.
+      bootstrap_extra_args = g.ami_type == "BOTTLEROCKET_x86_64" ? g.kubelet_extra_args : "--kubelet-extra-args '${g.kubelet_extra_args}'" // The set of extra arguments to the bootstrap script. Used to pass extra flags
+      iam_role_additional_policies = {                                                                                                     // The set of additional policies to add to the worker group IAM role.
+        for index, arn in var.worker_node_additional_policies :
+        arn => arn
+      }
+      max_size                     = g.max_nodes                // The maximum size of the worker group.
+      min_size                     = g.min_nodes                // The minimum size of the worker group.
+      name                         = "${var.name}-${g.name}"    // Prefix the worker group name with the name of the EKS cluster.
+      instance_types               = g.instance_types           // The instance types to use for worker nodes.
+      pre_bootstrap_user_data      = g.pre_bootstrap_user_data  // The pre-bootstrap user data to use for worker nodes.
+      post_bootstrap_user_data     = g.post_bootstrap_user_data // The pre-bootstrap user data to use for worker nodes.
+      iam_role_additional_policies = g.iam_role_additional_policies
+      iam_role_use_name_prefix     = g.iam_role_use_name_prefix
+      subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
+      tags = merge(g.extra_tags, {                                                                          // The set of tags placed on each worker node.
+        "k8s.io/cluster-autoscaler/enabled"     = "true",                                                   // Required by the cluster autoscaler.
+        "k8s.io/cluster-autoscaler/${var.name}" = "owned",                                                  // Required by the cluster autoscaler.
+      })
+      block_device_mappings = {
+        (g.root_volume_id) = {
+          device_name = g.root_volume_id
+          ebs = {
+            volume_size           = g.root_volume_size // The size of the root volume of each worker node.
+            volume_type           = g.root_volume_type // The type of the root volume of each worker node.
+            encrypted             = true               // Encrypt the volume.
+            delete_on_termination = true               // Delete the volume on instance termination.
+          }
+        }
+      }
+      metadata_options = {
+        http_endpoint               = "enabled"
+        http_protocol_ipv6          = "disabled"
+        http_put_response_hop_limit = 2
+        instance_metadata_tags      = "disabled"
+        http_tokens                 = var.allow_imdsv1 ? "optional" : "required"
+      }
+    }
+  }
   self_managed_node_groups = { // The set of self-managed node groups.
     for key, g in var.self_managed_node_groups :
     key => {
