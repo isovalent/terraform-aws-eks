@@ -123,13 +123,14 @@ module "main" {
         for index, arn in var.worker_node_additional_policies :
         arn => arn
       }
-      max_size                     = g.max_nodes                // The maximum size of the worker group.
-      min_size                     = g.min_nodes                // The minimum size of the worker group.
-      name                         = "${var.name}-${g.name}"    // Prefix the worker group name with the name of the EKS cluster.
-      instance_type                = g.instance_type            // The instance type to use for worker nodes.
-      pre_bootstrap_user_data      = g.pre_bootstrap_user_data  // The pre-bootstrap user data to use for worker nodes.
-      post_bootstrap_user_data     = g.post_bootstrap_user_data // The pre-bootstrap user data to use for worker nodes.
-      cloudinit_post_nodeadm       = g.cloudinit_post_nodeadm != null ? g.cloudinit_post_nodeadm : []
+      max_size                     = g.max_nodes                                                      // The maximum size of the worker group.
+      min_size                     = g.min_nodes                                                      // The minimum size of the worker group.
+      name                         = "${var.name}-${g.name}"                                          // Prefix the worker group name with the name of the EKS cluster.
+      instance_type                = g.instance_type                                                  // The instance type to use for worker nodes.
+      pre_bootstrap_user_data      = g.pre_bootstrap_user_data                                        // The pre-bootstrap user data to use for worker nodes.
+      post_bootstrap_user_data     = g.post_bootstrap_user_data                                       // The pre-bootstrap user data to use for worker nodes.
+      cloudinit_pre_nodeadm        = g.cloudinit_pre_nodeadm != null ? g.cloudinit_pre_nodeadm : []   // The set of cloud-init directives to run before nodeadm.
+      cloudinit_post_nodeadm       = g.cloudinit_post_nodeadm != null ? g.cloudinit_post_nodeadm : [] // The set of cloud-init directives to run after nodeadm.
       iam_role_additional_policies = g.iam_role_additional_policies
       iam_role_use_name_prefix     = g.iam_role_use_name_prefix
       subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
