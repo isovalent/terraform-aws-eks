@@ -146,6 +146,12 @@ variable "self_managed_node_groups" {
     name                     = string
     pre_bootstrap_user_data  = string
     post_bootstrap_user_data = string
+    cloudinit_pre_nodeadm = optional(list(object({
+      content      = string
+      content_type = optional(string)
+      filename     = optional(string)
+      merge_type   = optional(string)
+    })))
     cloudinit_post_nodeadm = optional(list(object({
       content      = string
       content_type = optional(string)
