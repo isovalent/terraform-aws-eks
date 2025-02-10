@@ -59,6 +59,12 @@ variable "cluster_service_ipv4_cidr" {
   type        = string
 }
 
+variable "cluster_addons" {
+  description = "Map of cluster addon configurations."
+  default     = {}
+  type        = any
+}
+
 variable "control_plane_subnet_ids" {
   default     = []
   description = "Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used."
