@@ -13,14 +13,42 @@
 // limitations under the License.
 
 locals {
-  aws_ebs_csi_driver_role_name           = "aws-ebs-csi-driver-${var.name}"                 // The name of the IAM role to be used by the AWS EBS CSI driver.
-  aws_load_balancer_controller_role_name = "aws-load-balancer-controller-${var.name}"       // The name of the IAM role to be used by the AWS Load Balancer controller.
-  cert_manager_role_name                 = "cert-manager-${var.name}"                       // The name of the IAM role to be used by 'cert-manager'.
-  cluster_autoscaler_role_name           = "cluster-autoscaler-${var.name}"                 // The name of the IAM role to be used by 'cluster-autoscaler'.
-  external_dns_role_name                 = "external-dns-${var.name}"                       // The name of the IAM role to be used by 'external-dns'.
-  phlare_role_name                       = "phlare-${var.name}"                             // The name of the IAM role to be used by Phlare.
-  iam_path                               = "/"                                              // The path in which to create IAM resources.
-  log_shipping_role_name                 = "log-shipping-${var.name}"                       // The name of the IAM role to be used by any log-shipping component(s).
-  path_to_kubeconfig_file                = abspath("${path.module}/${var.name}.kubeconfig") // The path to the kubeconfig file that will be created and output.
-  velero_role_name                       = "velero-${var.name}"                             // The name of the IAM role to be used by Velero.
+  aws_ebs_csi_driver_role_name           = "aws-ebs-csi-driver-${var.name}"           // The name of the IAM role to be used by the AWS EBS CSI driver.
+  aws_load_balancer_controller_role_name = "aws-load-balancer-controller-${var.name}" // The name of the IAM role to be used by the AWS Load Balancer controller.
+  cert_manager_role_name                 = "cert-manager-${var.name}"                 // The name of the IAM role to be used by 'cert-manager'.
+  cluster_addons = merge(
+    var.cluster_addons,
+    var.disable_aws_vpc_cni_plugin == false ? {} : {
+      vpc-cni = {
+        configuration_values = jsonencode({
+          affinity : {
+            nodeAffinity : {
+              requiredDuringSchedulingIgnoredDuringExecution : {
+                nodeSelectorTerms : [
+                  {
+                    matchExpressions : [
+                      {
+                        key : "io.cilium/aws-vpc-cni-plugin-enabled"
+                        operator : "In"
+                        values : [
+                          "true"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        })
+      }
+    }
+  )
+  cluster_autoscaler_role_name = "cluster-autoscaler-${var.name}"                 // The name of the IAM role to be used by 'cluster-autoscaler'.
+  external_dns_role_name       = "external-dns-${var.name}"                       // The name of the IAM role to be used by 'external-dns'.
+  phlare_role_name             = "phlare-${var.name}"                             // The name of the IAM role to be used by Phlare.
+  iam_path                     = "/"                                              // The path in which to create IAM resources.
+  log_shipping_role_name       = "log-shipping-${var.name}"                       // The name of the IAM role to be used by any log-shipping component(s).
+  path_to_kubeconfig_file      = abspath("${path.module}/${var.name}.kubeconfig") // The path to the kubeconfig file that will be created and output.
+  velero_role_name             = "velero-${var.name}"                             // The name of the IAM role to be used by Velero.
 }
