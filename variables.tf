@@ -169,7 +169,13 @@ variable "self_managed_node_groups" {
     root_volume_type             = string
     subnet_ids                   = list(string)
     iam_role_additional_policies = map(string)
-    iam_role_use_name_prefix     = optional(bool, true)
+    iam_role_use_name_prefix     = optional(bool)
+    create_iam_role_policy       = optional(bool)
+    iam_role_policy_arn          = optional(string)
+    create_iam_instance_profile  = optional(bool)
+    iam_instance_profile_name    = optional(string)
+    iam_instance_profile_arn     = optional(string)
+    iam_role_arn                 = optional(string)
     key_name                     = optional(string)
   }))
 }
@@ -200,4 +206,22 @@ variable "worker_node_additional_policies" {
   default     = []
   description = "A list of additional policies to add to worker nodes."
   type        = list(string)
+}
+
+variable "create_iam_role" {
+  description = "Whether to create an IAM role for the EKS cluster. If set to false, the 'eks_cluster_role_arn' variable must be provided."
+  default     = true
+  type        = bool
+}
+
+variable "iam_role_arn" {
+  description = "The ARN of the IAM role to use for the EKS cluster. If not provided, a new IAM role will be created."
+  default     = null
+  type        = string
+}
+
+variable "create_node_iam_role" {
+  description = "Whether to create an IAM role for the EKS worker nodes. If set to false, the 'node_iam_role_arn' variable must be provided."
+  default     = true
+  type        = bool
 }
