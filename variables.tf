@@ -228,4 +228,10 @@ variable "external_source_cidrs" {
   description = "A list of CIDRs that should be allowed to access the EKS cluster API server."
   default     = [""]
   type        = list(string)
+
+}
+variable "bootstrap_self_managed_addons" {
+  description = "Whether to bootstrap self-managed addons. If set to false, use cluster_addons to explicitly control which addons are installed.."
+  default     = true
+  type        = bool
 }
