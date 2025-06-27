@@ -98,6 +98,7 @@ module "main" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
 
+  bootstrap_self_managed_addons            = var.bootstrap_self_managed_addons                                                                                               // Control if any addons should be installed at bootstrap. Use with combination of cluster_addons to explicitely set only require addons. This way we can disable AWS VPC CNI and Kube-Proxy while enabling CoreDNS.
   cluster_addons                           = var.cluster_addons                                                                                                              // The set of addons to enable on the EKS cluster.
   enable_cluster_creator_admin_permissions = true                                                                                                                            // Give access to person/bot running terraform access to the cluster
   cluster_endpoint_public_access           = true                                                                                                                            // Enable public access to the Kubernetes API server.

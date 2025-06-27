@@ -201,3 +201,9 @@ variable "worker_node_additional_policies" {
   description = "A list of additional policies to add to worker nodes."
   type        = list(string)
 }
+
+variable "bootstrap_self_managed_addons" {
+  description = "Whether to bootstrap self-managed addons. If set to false, use cluster_addons to explicitly control which addons are installed.."
+  default     = true
+  type        = bool
+}
