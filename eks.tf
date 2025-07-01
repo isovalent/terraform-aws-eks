@@ -140,6 +140,7 @@ module "main" {
       iam_role_additional_policies = g.iam_role_additional_policies
       create_iam_instance_profile  = g.create_iam_instance_profile
       iam_instance_profile_arn     = g.iam_instance_profile_arn
+      create_access_entry          = g.create_access_entry
       iam_role_arn                 = g.iam_role_arn
       subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
       tags = merge(g.extra_tags, {                                                                          // The set of tags placed on each worker node.
