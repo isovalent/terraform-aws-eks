@@ -174,6 +174,7 @@ variable "self_managed_node_groups" {
     iam_instance_profile_arn     = optional(string)
     iam_role_arn                 = optional(string)
     key_name                     = optional(string)
+    create_access_entry          = optional(bool, true)
   }))
 }
 
