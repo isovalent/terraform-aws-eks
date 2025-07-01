@@ -98,9 +98,10 @@ module "main" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
 
-  cluster_addons                           = var.cluster_addons                                                                                                              // The set of addons to enable on the EKS cluster.
-  enable_cluster_creator_admin_permissions = true                                                                                                                            // Give access to person/bot running terraform access to the cluster
-  cluster_endpoint_public_access           = true                                                                                                                            // Enable public access to the Kubernetes API server.
+  cluster_addons                           = var.cluster_addons // The set of addons to enable on the EKS cluster.
+  enable_cluster_creator_admin_permissions = true               // Give access to person/bot running terraform access to the cluster
+  cluster_endpoint_public_access           = true
+  cluster_endpoint_public_access_cidrs     = var.external_source_cidrs                                                                                                       // Enable public access to the Kubernetes API server.
   authentication_mode                      = "API_AND_CONFIG_MAP"                                                                                                            // Authentication mode for EKS. Will move to API only in v21 of the upstream module
   cluster_name                             = var.name                                                                                                                        // The name of the EKS cluster.
   cluster_service_ipv4_cidr                = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from.
@@ -109,7 +110,11 @@ module "main" {
   enable_irsa                              = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
   subnet_ids                               = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
   tags                                     = var.tags                                                                                                                        // The tags placed on the EKS cluster.
-  vpc_id                                   = data.aws_vpc.vpc.id                                                                                                             // The ID of the VPC in which to create the cluster.
+  vpc_id                                   = data.aws_vpc.vpc.id
+  create_iam_role                          = var.create_iam_role
+  iam_role_arn                             = var.iam_role_arn
+  create_node_iam_role                     = var.create_node_iam_role
+
 
   self_managed_node_groups = { // The set of self-managed node groups.
     for key, g in var.self_managed_node_groups :
@@ -133,7 +138,9 @@ module "main" {
       cloudinit_pre_nodeadm        = g.cloudinit_pre_nodeadm != null ? g.cloudinit_pre_nodeadm : []   // The set of cloud-init directives to run before nodeadm.
       cloudinit_post_nodeadm       = g.cloudinit_post_nodeadm != null ? g.cloudinit_post_nodeadm : [] // The set of cloud-init directives to run after nodeadm.
       iam_role_additional_policies = g.iam_role_additional_policies
-      iam_role_use_name_prefix     = g.iam_role_use_name_prefix
+      create_iam_instance_profile  = g.create_iam_instance_profile
+      iam_instance_profile_arn     = g.iam_instance_profile_arn
+      iam_role_arn                 = g.iam_role_arn
       subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
       tags = merge(g.extra_tags, {                                                                          // The set of tags placed on each worker node.
         "k8s.io/cluster-autoscaler/enabled"     = "true",                                                   // Required by the cluster autoscaler.
