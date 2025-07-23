@@ -144,10 +144,9 @@ module "main" {
       create_access_entry          = g.create_access_entry
       iam_role_arn                 = g.iam_role_arn
       subnet_ids                   = length(g.subnet_ids) > 0 ? g.subnet_ids : data.aws_subnets.private.ids // Only place nodes in private subnets. This may change in the future.
-      launch_template_tags         = g.extra_tags
-      tags = merge(g.extra_tags, {                         // The set of tags placed on each worker node.
-        "k8s.io/cluster-autoscaler/enabled"     = "true",  // Required by the cluster autoscaler.
-        "k8s.io/cluster-autoscaler/${var.name}" = "owned", // Required by the cluster autoscaler.
+      launch_template_tags = merge(g.launch_template_tags, {                                                // The set of tags placed on each worker node.
+        "k8s.io/cluster-autoscaler/enabled"     = "true",                                                   // Required by the cluster autoscaler.
+        "k8s.io/cluster-autoscaler/${var.name}" = "owned",                                                  // Required by the cluster autoscaler.
       })
       block_device_mappings = {
         (g.root_volume_id) = {

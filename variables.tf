@@ -144,7 +144,7 @@ variable "self_managed_node_groups" {
   type = map(object({
     ami_type                 = string
     ami_name_filter          = string
-    extra_tags               = map(string)
+    launch_template_tags     = map(string)
     instance_type            = string
     kubelet_extra_args       = string
     max_nodes                = number
