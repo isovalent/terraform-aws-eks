@@ -56,6 +56,10 @@ output "workers_security_group_id" {
   value = module.main.node_security_group_id
 }
 
+output "cluster_security_group_id" {
+  value = module.main.cluster_security_group_id
+}
+
 output "workers_iam_role_arns" {
   value = toset([
     for k, v in module.main.self_managed_node_groups : v.iam_role_arn
