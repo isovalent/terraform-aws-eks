@@ -18,8 +18,10 @@ set -euxo pipefail
 
 AWS_DEFAULT_OUTPUT=json
 export AWS_DEFAULT_OUTPUT
+# Get the total number of available AZs in the region
+AZ_COUNT=$(aws ec2 describe-availability-zones --region "${2}" --filters Name=state,Values=available | jq '.AvailabilityZones | length')
 
-while (( $(aws ec2 describe-subnets --filters Name=vpc-id,Values="${1}" --filters Name=tag:eks-control-plane,Values=true --region "${2}" | jq -e '.Subnets[].AvailabilityZone' | wc -l | xargs) < 2 ));
+while (( $(aws ec2 describe-subnets --filters Name=vpc-id,Values="${1}" --filters Name=tag:eks-control-plane,Values=true --region "${2}" | jq -e '.Subnets[].AvailabilityZone' | wc -l | xargs) < AZ_COUNT ));
 do
   sleep 1;
 done
