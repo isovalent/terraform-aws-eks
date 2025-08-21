@@ -32,7 +32,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="module_iam_assumable_role_log_shipping"></a> [iam\_assumable\_role\_log\_shipping](#module\_iam\_assumable\_role\_log\_shipping) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_phlare"></a> [iam\_assumable\_role\_phlare](#module\_iam\_assumable\_role\_phlare) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.9.2 |
-| <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | ~> 20.0 |
+| <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | ~> 20.37.0 |
 
 ## Resources
 
