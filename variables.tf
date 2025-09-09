@@ -61,19 +61,17 @@ variable "cluster_service_ipv4_cidr" {
 
 variable "cluster_addons" {
   description = "Map of cluster addon configurations."
-  default     = {}
-  type        = any
+  default = {
+    coredns    = {}
+    kube-proxy = {}
+  }
+  type = any
 }
 
 variable "control_plane_subnet_ids" {
   default     = []
   description = "Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used."
   type        = list(string)
-}
-
-variable "disable_aws_vpc_cni_plugin" {
-  description = "Whether to disable the AWS VPC CNI plugin. Unless running in chaining mode, this should usually be 'true'."
-  type        = bool
 }
 
 variable "echo_server_instance_enabled" {
@@ -229,9 +227,4 @@ variable "external_source_cidrs" {
   default     = [""]
   type        = list(string)
 
-}
-variable "bootstrap_self_managed_addons" {
-  description = "Whether to bootstrap self-managed addons. If set to false, use cluster_addons to explicitly control which addons are installed.."
-  default     = true
-  type        = bool
 }

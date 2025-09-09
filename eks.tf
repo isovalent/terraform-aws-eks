@@ -96,17 +96,16 @@ data "aws_subnets" "public" {
 // EKS cluster.
 module "main" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.37.0"
+  version = "~> 21.3.1"
 
-  bootstrap_self_managed_addons            = var.bootstrap_self_managed_addons // Control if any addons should be installed at bootstrap. Use with combination of cluster_addons to explicitely set only require addons. This way we can disable AWS VPC CNI and Kube-Proxy while enabling CoreDNS.
-  cluster_addons                           = var.cluster_addons                // The set of addons to enable on the EKS cluster.
-  enable_cluster_creator_admin_permissions = true                              // Give access to person/bot running terraform access to the cluster
-  cluster_endpoint_public_access           = true
-  cluster_endpoint_public_access_cidrs     = var.external_source_cidrs                                                                                                       // Enable public access to the Kubernetes API server.
+  addons                                   = var.cluster_addons // The set of addons to enable on the EKS cluster.
+  enable_cluster_creator_admin_permissions = true               // Give access to person/bot running terraform access to the cluster
+  endpoint_public_access                   = true
+  endpoint_public_access_cidrs             = var.external_source_cidrs                                                                                                       // Enable public access to the Kubernetes API server.
   authentication_mode                      = "API_AND_CONFIG_MAP"                                                                                                            // Authentication mode for EKS. Will move to API only in v21 of the upstream module
-  cluster_name                             = var.name                                                                                                                        // The name of the EKS cluster.
-  cluster_service_ipv4_cidr                = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from.
-  cluster_version                          = var.kubernetes_version                                                                                                          // The version of EKS to use.
+  name                                     = var.name                                                                                                                        // The name of the EKS cluster.
+  service_ipv4_cidr                        = var.cluster_service_ipv4_cidr                                                                                                   // The CIDR block to assign Kubernetes service IP addresses from.
+  kubernetes_version                       = var.kubernetes_version                                                                                                          // The version of EKS to use.
   control_plane_subnet_ids                 = length(var.control_plane_subnet_ids) > 0 ? var.control_plane_subnet_ids : data.aws_subnets.eks_control_plane.ids                // The set of all subnets in which the EKS control-plane can be placed.
   enable_irsa                              = true                                                                                                                            // Enable IAM roles for service accounts. These are used extensively.
   subnet_ids                               = var.include_public_subnets ? setunion(data.aws_subnets.private.ids, data.aws_subnets.public.ids) : data.aws_subnets.private.ids // The set of all subnets in which worker nodes can be placed.
@@ -186,23 +185,6 @@ resource "null_resource" "kubeconfig" {
       CLUSTER_NAME = var.name,
       KUBECONFIG   = local.path_to_kubeconfig_file,
       REGION       = var.region,
-    }
-  }
-}
-
-resource "null_resource" "disable_aws_vpc_cni_plugin" {
-  count = var.disable_aws_vpc_cni_plugin ? 1 : 0
-
-  depends_on = [
-    null_resource.kubeconfig,
-  ]
-
-  provisioner "local-exec" {
-    command = <<EOF
-kubectl -n kube-system patch ds aws-node -p '{"spec":{"template":{"spec":{"nodeSelector":{"io.cilium/aws-node-enabled":"true"}}}}}'
-EOF
-    environment = {
-      KUBECONFIG = local.path_to_kubeconfig_file,
     }
   }
 }
