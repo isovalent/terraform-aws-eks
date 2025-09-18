@@ -7,18 +7,18 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.2 |
-| <a name="requirement_tls"></a> [tls](#requirement\_tls) | ~> 4.1.0 |
+| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.0 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | ~> 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
-| <a name="provider_null"></a> [null](#provider\_null) | ~> 3.2 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | ~> 4.1.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | ~> 3.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | ~> 4.0 |
 
 ## Modules
 
@@ -91,7 +91,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="input_aws_ebs_csi_driver_oidc_fully_qualified_subjects"></a> [aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects](#input\_aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-ebs-csi-driver' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_aws_load_balancer_controller_oidc_fully_qualified_subjects"></a> [aws\_load\_balancer\_controller\_oidc\_fully\_qualified\_subjects](#input\_aws\_load\_balancer\_controller\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-load-balancer-controller' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_cert_manager_oidc_fully_qualified_subjects"></a> [cert\_manager\_oidc\_fully\_qualified\_subjects](#input\_cert\_manager\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'cert-manager' role using OpenID Connect. | `list(string)` | `[]` | no |
-| <a name="input_cluster_addons"></a> [cluster\_addons](#input\_cluster\_addons) | Map of cluster addon configurations. | `any` | <pre>{<br/>  "coredns": {}<br/>}</pre> | no |
+| <a name="input_cluster_addons"></a> [cluster\_addons](#input\_cluster\_addons) | Map of cluster addon configurations. | `any` | <pre>{<br/>  "coredns": {},<br/>  "kube-proxy": {}<br/>}</pre> | no |
 | <a name="input_cluster_autoscaler_oidc_fully_qualified_subjects"></a> [cluster\_autoscaler\_oidc\_fully\_qualified\_subjects](#input\_cluster\_autoscaler\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'cluster-autoscaler' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_cluster_service_ipv4_cidr"></a> [cluster\_service\_ipv4\_cidr](#input\_cluster\_service\_ipv4\_cidr) | The CIDR block to assign Kubernetes service IP addresses from. | `string` | `null` | no |
 | <a name="input_control_plane_subnet_ids"></a> [control\_plane\_subnet\_ids](#input\_control\_plane\_subnet\_ids) | Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used. | `list(string)` | `[]` | no |
