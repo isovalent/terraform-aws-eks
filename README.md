@@ -7,18 +7,18 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.34.0 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.1.1 |
-| <a name="requirement_tls"></a> [tls](#requirement\_tls) | < 4.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
+| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.0 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | ~> 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.34.0 |
-| <a name="provider_null"></a> [null](#provider\_null) | >= 3.1.1 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | < 4.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | ~> 3.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | ~> 4.0 |
 
 ## Modules
 
@@ -32,7 +32,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="module_iam_assumable_role_log_shipping"></a> [iam\_assumable\_role\_log\_shipping](#module\_iam\_assumable\_role\_log\_shipping) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_phlare"></a> [iam\_assumable\_role\_phlare](#module\_iam\_assumable\_role\_phlare) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.9.2 |
-| <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | ~> 20.37.0 |
+| <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | ~> 21.3.1 |
 
 ## Resources
 
@@ -68,7 +68,6 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | [aws_security_group_rule.workers_egress_ssh](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.workers_to_workers_egress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.workers_to_workers_ingress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [null_resource.disable_aws_vpc_cni_plugin](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.kubeconfig](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.wait_for_control_plane_subnets](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [tls_private_key.ssh_key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
@@ -91,15 +90,13 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="input_ami_owners"></a> [ami\_owners](#input\_ami\_owners) | The list of acceptable owners of AMIs to be used for worker nodes. | `list(string)` | <pre>[<br/>  "099720109477",<br/>  "679593333241",<br/>  "amazon",<br/>  "self"<br/>]</pre> | no |
 | <a name="input_aws_ebs_csi_driver_oidc_fully_qualified_subjects"></a> [aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects](#input\_aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-ebs-csi-driver' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_aws_load_balancer_controller_oidc_fully_qualified_subjects"></a> [aws\_load\_balancer\_controller\_oidc\_fully\_qualified\_subjects](#input\_aws\_load\_balancer\_controller\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-load-balancer-controller' role using OpenID Connect. | `list(string)` | `[]` | no |
-| <a name="input_bootstrap_self_managed_addons"></a> [bootstrap\_self\_managed\_addons](#input\_bootstrap\_self\_managed\_addons) | Whether to bootstrap self-managed addons. If set to false, use cluster\_addons to explicitly control which addons are installed.. | `bool` | `true` | no |
 | <a name="input_cert_manager_oidc_fully_qualified_subjects"></a> [cert\_manager\_oidc\_fully\_qualified\_subjects](#input\_cert\_manager\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'cert-manager' role using OpenID Connect. | `list(string)` | `[]` | no |
-| <a name="input_cluster_addons"></a> [cluster\_addons](#input\_cluster\_addons) | Map of cluster addon configurations. | `any` | `{}` | no |
+| <a name="input_cluster_addons"></a> [cluster\_addons](#input\_cluster\_addons) | Map of cluster addon configurations. | `any` | <pre>{<br/>  "coredns": {},<br/>  "kube-proxy": {}<br/>}</pre> | no |
 | <a name="input_cluster_autoscaler_oidc_fully_qualified_subjects"></a> [cluster\_autoscaler\_oidc\_fully\_qualified\_subjects](#input\_cluster\_autoscaler\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'cluster-autoscaler' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_cluster_service_ipv4_cidr"></a> [cluster\_service\_ipv4\_cidr](#input\_cluster\_service\_ipv4\_cidr) | The CIDR block to assign Kubernetes service IP addresses from. | `string` | `null` | no |
 | <a name="input_control_plane_subnet_ids"></a> [control\_plane\_subnet\_ids](#input\_control\_plane\_subnet\_ids) | Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used. | `list(string)` | `[]` | no |
 | <a name="input_create_iam_role"></a> [create\_iam\_role](#input\_create\_iam\_role) | Whether to create an IAM role for the EKS cluster. If set to false, the 'eks\_cluster\_role\_arn' variable must be provided. | `bool` | `true` | no |
 | <a name="input_create_node_iam_role"></a> [create\_node\_iam\_role](#input\_create\_node\_iam\_role) | Whether to create an IAM role for the EKS worker nodes. If set to false, the 'node\_iam\_role\_arn' variable must be provided. | `bool` | `true` | no |
-| <a name="input_disable_aws_vpc_cni_plugin"></a> [disable\_aws\_vpc\_cni\_plugin](#input\_disable\_aws\_vpc\_cni\_plugin) | Whether to disable the AWS VPC CNI plugin. Unless running in chaining mode, this should usually be 'true'. | `bool` | n/a | yes |
 | <a name="input_echo_server_instance_enabled"></a> [echo\_server\_instance\_enabled](#input\_echo\_server\_instance\_enabled) | Whether to create an EC2 instance outside the cluster that can act as 'echo-server'. | `bool` | `false` | no |
 | <a name="input_echo_server_instance_user_data"></a> [echo\_server\_instance\_user\_data](#input\_echo\_server\_instance\_user\_data) | The user data script to use for the 'echo-server' instance. | `string` | `""` | no |
 | <a name="input_external_dns_oidc_fully_qualified_subjects"></a> [external\_dns\_oidc\_fully\_qualified\_subjects](#input\_external\_dns\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'external-dns' role using OpenID Connect. | `list(string)` | `[]` | no |
