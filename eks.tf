@@ -188,3 +188,53 @@ resource "null_resource" "kubeconfig" {
     }
   }
 }
+
+resource "null_resource" "wait_for_node_ready" {
+  depends_on = [
+    null_resource.kubeconfig, // Do not run before the kubeconfig file is created.
+  ]
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      set -e
+      echo "Waiting for nodes to join the cluster..."
+      KUBECONFIG=${local.path_to_kubeconfig_file}
+      
+      # Wait for at least one node to appear (up to 10 minutes)
+      timeout=600
+      elapsed=0
+      while [ $elapsed -lt $timeout ]; do
+        node_count=$(kubectl --kubeconfig=$KUBECONFIG get nodes --no-headers 2>/dev/null | wc -l || echo "0")
+        if [ "$node_count" -gt "0" ]; then
+          echo "Found $node_count node(s), waiting for them to be ready..."
+          break
+        fi
+        echo "No nodes found yet, waiting... ($elapsed/$timeout seconds)"
+        sleep 10
+        elapsed=$((elapsed + 10))
+      done
+      
+      if [ "$node_count" -eq "0" ]; then
+        echo "ERROR: No nodes joined the cluster within $timeout seconds"
+        exit 1
+      fi
+      
+      # Now wait for all nodes to be ready
+      kubectl --kubeconfig=$KUBECONFIG wait --for=condition=Ready nodes --all --timeout=15m
+    EOT
+  }
+}
+
+resource "aws_eks_addon" "coredns" {
+  count        = var.cluster_addons == null ? 1 : 0
+  depends_on   = [null_resource.wait_for_node_ready]
+  cluster_name = module.main.cluster_name
+  addon_name   = "coredns"
+}
+
+resource "aws_eks_addon" "kube_proxy" {
+  count        = var.cluster_addons == null ? 1 : 0
+  cluster_name = module.main.cluster_name
+  addon_name   = "kube-proxy"
+}
+

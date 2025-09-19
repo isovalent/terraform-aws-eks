@@ -61,11 +61,8 @@ variable "cluster_service_ipv4_cidr" {
 
 variable "cluster_addons" {
   description = "Map of cluster addon configurations."
-  default = {
-    coredns    = {}
-    kube-proxy = {}
-  }
-  type = any
+  default     = null
+  type        = any
 }
 
 variable "control_plane_subnet_ids" {
