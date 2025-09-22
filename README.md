@@ -38,6 +38,8 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 
 | Name | Type |
 |------|------|
+| [aws_eks_addon.coredns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon) | resource |
+| [aws_eks_addon.kube_proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon) | resource |
 | [aws_iam_policy.aws_ebs_csi_driver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.aws_load_balancer_controller](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.cert_manager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -70,6 +72,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | [aws_security_group_rule.workers_to_workers_ingress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [null_resource.kubeconfig](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.wait_for_control_plane_subnets](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.wait_for_node_ready](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [tls_private_key.ssh_key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
 | [aws_ami.ubuntu](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_ami.workers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
@@ -91,7 +94,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 | <a name="input_aws_ebs_csi_driver_oidc_fully_qualified_subjects"></a> [aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects](#input\_aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-ebs-csi-driver' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_aws_load_balancer_controller_oidc_fully_qualified_subjects"></a> [aws\_load\_balancer\_controller\_oidc\_fully\_qualified\_subjects](#input\_aws\_load\_balancer\_controller\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-load-balancer-controller' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_cert_manager_oidc_fully_qualified_subjects"></a> [cert\_manager\_oidc\_fully\_qualified\_subjects](#input\_cert\_manager\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'cert-manager' role using OpenID Connect. | `list(string)` | `[]` | no |
-| <a name="input_cluster_addons"></a> [cluster\_addons](#input\_cluster\_addons) | Map of cluster addon configurations. | `any` | <pre>{<br/>  "coredns": {},<br/>  "kube-proxy": {}<br/>}</pre> | no |
+| <a name="input_cluster_addons"></a> [cluster\_addons](#input\_cluster\_addons) | Map of cluster addon configurations. | `any` | `null` | no |
 | <a name="input_cluster_autoscaler_oidc_fully_qualified_subjects"></a> [cluster\_autoscaler\_oidc\_fully\_qualified\_subjects](#input\_cluster\_autoscaler\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'cluster-autoscaler' role using OpenID Connect. | `list(string)` | `[]` | no |
 | <a name="input_cluster_service_ipv4_cidr"></a> [cluster\_service\_ipv4\_cidr](#input\_cluster\_service\_ipv4\_cidr) | The CIDR block to assign Kubernetes service IP addresses from. | `string` | `null` | no |
 | <a name="input_control_plane_subnet_ids"></a> [control\_plane\_subnet\_ids](#input\_control\_plane\_subnet\_ids) | Can be used to override the list of subnet IDs to use for the EKS control-plane. If not defined, subnets tagged with 'eks-control-plane: true' will be used. | `list(string)` | `[]` | no |
