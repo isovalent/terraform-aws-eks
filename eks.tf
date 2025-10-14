@@ -222,6 +222,9 @@ resource "null_resource" "wait_for_node_ready" {
       
       # Now wait for all nodes to be ready
       kubectl --kubeconfig=$KUBECONFIG wait --for=condition=Ready nodes --all --timeout=15m
+
+      #Sleep another two minutes to give CNI time to settle
+      sleep 120
     EOT
   }
 }
