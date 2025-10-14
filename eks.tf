@@ -190,7 +190,7 @@ resource "null_resource" "kubeconfig" {
 }
 
 resource "null_resource" "wait_for_node_ready" {
-  count = var.cluster_addons == null ? 1 : 0
+  count = var.cluster_addons == null || contains(keys(var.cluster_addons), "coredns") ? 1 : 0
   depends_on = [
     null_resource.kubeconfig, // Do not run before the kubeconfig file is created.
   ]
@@ -230,7 +230,7 @@ resource "null_resource" "wait_for_node_ready" {
 }
 
 resource "aws_eks_addon" "coredns" {
-  count        = var.cluster_addons == null ? 1 : 0
+  count        = var.cluster_addons == null || contains(keys(var.cluster_addons), "coredns") ? 1 : 0
   depends_on   = [null_resource.wait_for_node_ready]
   cluster_name = module.main.cluster_name
   addon_name   = "coredns"
