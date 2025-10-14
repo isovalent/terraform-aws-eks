@@ -98,8 +98,8 @@ module "main" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.3.1"
 
-  addons                                   = var.cluster_addons // The set of addons to enable on the EKS cluster.
-  enable_cluster_creator_admin_permissions = true               // Give access to person/bot running terraform access to the cluster
+  addons                                   = var.cluster_addons != null ? { for k, v in var.cluster_addons : k => v if k != "coredns" } : null // The set of addons to enable on the EKS cluster, excluding coredns which is managed separately.
+  enable_cluster_creator_admin_permissions = true                                                                                              // Give access to person/bot running terraform access to the cluster
   endpoint_public_access                   = true
   endpoint_public_access_cidrs             = var.external_source_cidrs                                                                                                       // Enable public access to the Kubernetes API server.
   authentication_mode                      = "API_AND_CONFIG_MAP"                                                                                                            // Authentication mode for EKS. Will move to API only in v21 of the upstream module
@@ -190,7 +190,7 @@ resource "null_resource" "kubeconfig" {
 }
 
 resource "null_resource" "wait_for_node_ready" {
-  count = var.cluster_addons == null ? 1 : 0
+  count = var.cluster_addons == null || contains(keys(var.cluster_addons), "coredns") ? 1 : 0
   depends_on = [
     null_resource.kubeconfig, // Do not run before the kubeconfig file is created.
   ]
@@ -230,7 +230,7 @@ resource "null_resource" "wait_for_node_ready" {
 }
 
 resource "aws_eks_addon" "coredns" {
-  count        = var.cluster_addons == null ? 1 : 0
+  count        = var.cluster_addons == null || contains(keys(var.cluster_addons), "coredns") ? 1 : 0
   depends_on   = [null_resource.wait_for_node_ready]
   cluster_name = module.main.cluster_name
   addon_name   = "coredns"
