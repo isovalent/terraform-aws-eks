@@ -170,6 +170,7 @@ variable "self_managed_node_groups" {
     iam_role_arn                 = optional(string)
     key_name                     = optional(string)
     create_access_entry          = optional(bool, true)
+    availability_zones           = optional(list(string))
   }))
 }
 
