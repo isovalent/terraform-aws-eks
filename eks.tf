@@ -166,6 +166,8 @@ module "main" {
         instance_metadata_tags      = "disabled"
         http_tokens                 = var.allow_imdsv1 ? "optional" : "required"
       }
+      enable_efa_support = g.enable_efa_support
+      network_interfaces = g.network_interfaces
     }
   }
 }

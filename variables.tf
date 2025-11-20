@@ -171,6 +171,8 @@ variable "self_managed_node_groups" {
     key_name                     = optional(string)
     create_access_entry          = optional(bool, true)
     availability_zones           = optional(list(string))
+    enable_efa_support           = optional(bool, false)
+    network_interfaces           = optional(list(any))
   }))
 }
 
