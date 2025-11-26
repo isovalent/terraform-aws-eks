@@ -168,6 +168,7 @@ module "main" {
       }
       enable_efa_support = g.enable_efa_support
       network_interfaces = g.network_interfaces
+      metadata_options   = g.metadata_options
     }
   }
 }

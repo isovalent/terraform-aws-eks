@@ -173,6 +173,13 @@ variable "self_managed_node_groups" {
     availability_zones           = optional(list(string))
     enable_efa_support           = optional(bool, false)
     network_interfaces           = optional(list(any))
+    metadata_options = optional(object({
+      http_endpoint               = optional(string, "enabled")
+      http_protocol_ipv6          = optional(string)
+      http_put_response_hop_limit = optional(number, 1)
+      http_tokens                 = optional(string, "required")
+      instance_metadata_tags      = optional(string)
+    }))
   }))
 }
 
