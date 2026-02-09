@@ -176,7 +176,7 @@ variable "self_managed_node_groups" {
     metadata_options = optional(object({
       http_endpoint               = optional(string, "enabled")
       http_protocol_ipv6          = optional(string)
-      http_put_response_hop_limit = optional(number, 1)
+      http_put_response_hop_limit = optional(number, 2)
       http_tokens                 = optional(string, "required")
       instance_metadata_tags      = optional(string)
     }))

@@ -159,13 +159,6 @@ module "main" {
           }
         }
       }
-      metadata_options = {
-        http_endpoint               = "enabled"
-        http_protocol_ipv6          = "disabled"
-        http_put_response_hop_limit = 2
-        instance_metadata_tags      = "disabled"
-        http_tokens                 = var.allow_imdsv1 ? "optional" : "required"
-      }
       enable_efa_support = g.enable_efa_support
       network_interfaces = g.network_interfaces
       metadata_options   = g.metadata_options
