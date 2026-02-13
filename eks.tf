@@ -96,7 +96,7 @@ data "aws_subnets" "public" {
 // EKS cluster.
 module "main" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 21.3.1"
+  version = "~> 21.15.0"
 
   addons                                   = var.cluster_addons != null ? { for k, v in var.cluster_addons : k => v if k != "coredns" } : null // The set of addons to enable on the EKS cluster, excluding coredns which is managed separately.
   enable_cluster_creator_admin_permissions = true                                                                                              // Give access to person/bot running terraform access to the cluster
