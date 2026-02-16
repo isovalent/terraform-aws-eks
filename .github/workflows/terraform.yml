@@ -10,7 +10,7 @@ on:
       - master
 jobs:
   formatting:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -20,7 +20,7 @@ jobs:
         uses: dflook/terraform-fmt-check@c9309dc072b71dded0f23b29e3ffd4406e27c078
   docs:
     needs: formatting
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
