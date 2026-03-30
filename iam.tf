@@ -74,7 +74,7 @@ data "aws_iam_policy_document" "log_shipping" {
 module "iam_assumable_role_log_shipping" {
   count   = length(var.log_shipping_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "phlare" {
 module "iam_assumable_role_phlare" {
   count   = length(var.phlare_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -169,7 +169,7 @@ resource "aws_iam_policy" "aws_load_balancer_controller" {
 module "iam_assumable_role_aws_load_balancer_controller" {
   count   = length(var.aws_load_balancer_controller_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -194,7 +194,7 @@ resource "aws_iam_policy" "aws_ebs_csi_driver" {
 module "iam_assumable_role_aws_ebs_csi_driver" {
   count   = length(var.aws_ebs_csi_driver_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -219,7 +219,7 @@ resource "aws_iam_policy" "cluster_autoscaler" {
 module "iam_assumable_role_cluster_autoscaler" {
   count   = length(var.cluster_autoscaler_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -244,7 +244,7 @@ resource "aws_iam_policy" "external_dns" {
 module "iam_assumable_role_external_dns" {
   count   = length(var.external_dns_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -269,7 +269,7 @@ resource "aws_iam_policy" "cert_manager" {
 module "iam_assumable_role_cert_manager" {
   count   = length(var.cert_manager_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.4.0"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
@@ -348,7 +348,7 @@ data "aws_iam_policy_document" "velero" {
 module "iam_assumable_role_velero" {
   count   = length(var.velero_oidc_fully_qualified_subjects) > 0 ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "5.9.2"
+  version = "6.4.0"
 
   create_role                   = true
   provider_url                  = replace(module.main.cluster_oidc_issuer_url, "https://", "")
