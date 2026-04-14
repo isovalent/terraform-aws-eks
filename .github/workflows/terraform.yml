@@ -1,36 +1,36 @@
-name: Terraform docs and formatting
+name: Terraform
+
 on:
-  pull_request_target:
-    types:
-      - opened
-      - synchronize
-      - reopened
-  push:
+  pull_request:
     branches:
-      - master
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  formatting:
-    runs-on: ubuntu-22.04
+  terraform:
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: cisco-actions-ghe/checkout@f9ed9285a43c795f3f46f9b5f70c82935abf3c6d # v4.2.2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: terraform fmt
-        uses: dflook/terraform-fmt-check@c9309dc072b71dded0f23b29e3ffd4406e27c078
-  docs:
-    needs: formatting
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+          ref: ${{ github.event.pull_request.head.ref || github.sha }}
+          fetch-depth: 0
+      - name: Configure git for private modules
+        env:
+          GH_READ_TOKEN: ${{ secrets.ISOVALENT_BOT_READ_PRIVATE_REPOSITORIES }}
+        run: |
+          git config --global url."https://x-access-token:${GH_READ_TOKEN}@github.com/isovalent".insteadOf "ssh://git@github.com/isovalent"
+      - uses: cisco-actions-ghe/hashicorp-setup-terraform@74653521a633b678d35d8d82a296404cb93f8a6e # v3.1.2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: Render terraform docs inside the README.md and push changes back to PR branch
-        uses: terraform-docs/gh-actions@d8f1a2272f04d6124103eb65815f007e091e756a
-        with:
-          working-dir: .
-          output-file: README.md
-          output-method: inject
-          output-format: markdown table
-          git-push: "true"
+          terraform_version: 1.14.8
+      - name: Terraform Fmt
+        run: terraform fmt -check
+        continue-on-error: false
+      - name: Terraform Init
+        run: terraform init
+        continue-on-error: false
+      - name: Terraform Validate
+        run: terraform validate
+        continue-on-error: false

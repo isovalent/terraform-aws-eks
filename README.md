@@ -2,28 +2,38 @@
 
 An opinionated Terraform module that can be used to create and manage an EKS cluster in AWS in a simplified way.
 
+## Development
+
+After cloning the repository, run the following command to set up the git hooks:
+
+```sh
+make hooks
+```
+
+The pre-commit hook will automatically run `terraform fmt`, `terraform init`, `terraform validate`, and `terraform-docs` on any commit that modifies `.tf` files. If any of these commands modify files (e.g., formatting changes), the commit will be aborted and you will need to `git add` the modified files and commit again.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.0 |
-| <a name="requirement_tls"></a> [tls](#requirement\_tls) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 6.40.0 |
+| <a name="requirement_null"></a> [null](#requirement\_null) | 3.2.4 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | 4.2.1 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
-| <a name="provider_null"></a> [null](#provider\_null) | ~> 3.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | ~> 4.0 |
+| ---- | ------- |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.40.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | 3.2.4 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.2.1 |
 
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_iam_assumable_role_aws_ebs_csi_driver"></a> [iam\_assumable\_role\_aws\_ebs\_csi\_driver](#module\_iam\_assumable\_role\_aws\_ebs\_csi\_driver) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_aws_load_balancer_controller"></a> [iam\_assumable\_role\_aws\_load\_balancer\_controller](#module\_iam\_assumable\_role\_aws\_load\_balancer\_controller) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
 | <a name="module_iam_assumable_role_cert_manager"></a> [iam\_assumable\_role\_cert\_manager](#module\_iam\_assumable\_role\_cert\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
@@ -37,58 +47,58 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 ## Resources
 
 | Name | Type |
-|------|------|
-| [aws_eks_addon.coredns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon) | resource |
-| [aws_eks_addon.kube_proxy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon) | resource |
-| [aws_iam_policy.aws_ebs_csi_driver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.aws_load_balancer_controller](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.cert_manager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.external_dns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.phlare](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.velero](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_instance.echo-server](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
-| [aws_key_pair.ssh_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
-| [aws_s3_bucket.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket.phlare](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket.velero](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_acl.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
-| [aws_s3_bucket_acl.phlare](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
-| [aws_s3_bucket_acl.velero](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
-| [aws_s3_bucket_lifecycle_configuration.velero](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
-| [aws_s3_bucket_ownership_controls.log_shipping_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
-| [aws_s3_bucket_ownership_controls.phlare_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
-| [aws_s3_bucket_ownership_controls.velero_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
-| [aws_s3_bucket_public_access_block.log_shipping_block_public_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_s3_bucket_public_access_block.phlare_block_public_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_s3_bucket_public_access_block.velero_block_public_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_security_group_rule.cluster_to_workers_ingress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.workers_egress_dns_tcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.workers_egress_dns_udp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.workers_egress_http](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.workers_egress_ssh](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.workers_to_workers_egress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [aws_security_group_rule.workers_to_workers_ingress_all](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-| [null_resource.kubeconfig](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.wait_for_control_plane_subnets](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.wait_for_node_ready](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [tls_private_key.ssh_key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
-| [aws_ami.ubuntu](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
-| [aws_ami.workers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.phlare](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.velero](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_subnets.eks_control_plane](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
-| [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
-| [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
-| [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
+| ---- | ---- |
+| [aws_eks_addon.coredns](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/eks_addon) | resource |
+| [aws_eks_addon.kube_proxy](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/eks_addon) | resource |
+| [aws_iam_policy.aws_ebs_csi_driver](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.aws_load_balancer_controller](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.cert_manager](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.external_dns](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.phlare](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.velero](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/iam_policy) | resource |
+| [aws_instance.echo-server](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/instance) | resource |
+| [aws_key_pair.ssh_access](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/key_pair) | resource |
+| [aws_s3_bucket.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket.phlare](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket.velero](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_acl.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_acl.phlare](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_acl.velero](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_lifecycle_configuration.velero](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_lifecycle_configuration) | resource |
+| [aws_s3_bucket_ownership_controls.log_shipping_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_ownership_controls) | resource |
+| [aws_s3_bucket_ownership_controls.phlare_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_ownership_controls) | resource |
+| [aws_s3_bucket_ownership_controls.velero_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_ownership_controls) | resource |
+| [aws_s3_bucket_public_access_block.log_shipping_block_public_access](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_s3_bucket_public_access_block.phlare_block_public_access](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_s3_bucket_public_access_block.velero_block_public_access](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_security_group_rule.cluster_to_workers_ingress_all](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.workers_egress_dns_tcp](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.workers_egress_dns_udp](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.workers_egress_http](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.workers_egress_ssh](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.workers_to_workers_egress_all](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.workers_to_workers_ingress_all](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/resources/security_group_rule) | resource |
+| [null_resource.kubeconfig](https://registry.terraform.io/providers/hashicorp/null/3.2.4/docs/resources/resource) | resource |
+| [null_resource.wait_for_control_plane_subnets](https://registry.terraform.io/providers/hashicorp/null/3.2.4/docs/resources/resource) | resource |
+| [null_resource.wait_for_node_ready](https://registry.terraform.io/providers/hashicorp/null/3.2.4/docs/resources/resource) | resource |
+| [tls_private_key.ssh_key](https://registry.terraform.io/providers/hashicorp/tls/4.2.1/docs/resources/private_key) | resource |
+| [aws_ami.ubuntu](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/ami) | data source |
+| [aws_ami.workers](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/ami) | data source |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.log_shipping](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.phlare](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.velero](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_subnets.eks_control_plane](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/subnets) | data source |
+| [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/subnets) | data source |
+| [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/subnets) | data source |
+| [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/6.40.0/docs/data-sources/vpc) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_allow_imdsv1"></a> [allow\_imdsv1](#input\_allow\_imdsv1) | Whether to allow IMDSv1 access (insecure). | `bool` | `false` | no |
 | <a name="input_ami_owners"></a> [ami\_owners](#input\_ami\_owners) | The list of acceptable owners of AMIs to be used for worker nodes. | `list(string)` | <pre>[<br/>  "099720109477",<br/>  "679593333241",<br/>  "amazon",<br/>  "self"<br/>]</pre> | no |
 | <a name="input_aws_ebs_csi_driver_oidc_fully_qualified_subjects"></a> [aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects](#input\_aws\_ebs\_csi\_driver\_oidc\_fully\_qualified\_subjects) | The list of trusted resources which can assume the 'aws-ebs-csi-driver' role using OpenID Connect. | `list(string)` | `[]` | no |
@@ -123,7 +133,7 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_aws_ebs_csi_driver_policy_arn"></a> [aws\_ebs\_csi\_driver\_policy\_arn](#output\_aws\_ebs\_csi\_driver\_policy\_arn) | n/a |
 | <a name="output_aws_ebs_csi_driver_role_arn"></a> [aws\_ebs\_csi\_driver\_role\_arn](#output\_aws\_ebs\_csi\_driver\_role\_arn) | n/a |
 | <a name="output_aws_load_balancer_controller_role_arn"></a> [aws\_load\_balancer\_controller\_role\_arn](#output\_aws\_load\_balancer\_controller\_role\_arn) | n/a |

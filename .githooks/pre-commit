@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+CONFIG_FILE="${REPO_ROOT}/.terraform-docs.yml"
+
+# Only run if there are staged .tf files
+if ! git diff --cached --name-only --diff-filter=ACM | grep -q '\.tf$'; then
+    exit 0
+fi
+
+echo -e "${YELLOW}Running pre-commit checks...${NC}"
+
+FAILED=0
+
+touch .timestamp
+
+echo "  > terraform fmt"
+if ! terraform fmt; then
+    echo -e "${RED}    terraform fmt failed${NC}"
+    FAILED=1
+fi
+
+echo "  > terraform init -upgrade"
+if ! terraform init -upgrade > /dev/null; then
+    echo -e "${RED}    terraform init failed${NC}"
+    FAILED=1
+fi
+
+echo "  > terraform validate"
+if ! terraform validate; then
+    echo -e "${RED}    terraform validate failed${NC}"
+    FAILED=1
+fi
+
+echo "  > terraform-docs"
+if [ -f "$CONFIG_FILE" ]; then
+    if ! terraform-docs markdown table --output-file README.md --output-mode inject --config "$CONFIG_FILE" .; then
+        echo -e "${RED}    terraform-docs failed${NC}"
+        FAILED=1
+    fi
+else
+    echo -e "${RED}Config file not found: $CONFIG_FILE${NC}"
+    FAILED=1
+fi
+
+if ! git diff --quiet; then
+    echo -e "\n${RED}Files were modified by the pre-commit hook (fmt or docs updates).${NC}"
+    echo -e "${RED}Please 'git add' the modified files and commit again.${NC}"
+    echo -e "${YELLOW}Modified files:${NC}"
+    git diff --name-only
+    exit 1
+fi
+
+if [ $FAILED -ne 0 ]; then
+    echo -e "\n${RED}Pre-commit checks failed.${NC}"
+    exit 1
+fi
+
+echo -e "\n${GREEN}All checks passed!${NC}"
+exit 0

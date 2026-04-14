@@ -1,5 +1,6 @@
 .terraform.lock.hcl
 .terraform/
+.timestamp
 .vscode/
 terraform.tfstate*
 terraform.tfvars
