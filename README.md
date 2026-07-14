@@ -24,14 +24,14 @@ An opinionated Terraform module that can be used to create and manage an EKS clu
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_iam_assumable_role_aws_ebs_csi_driver"></a> [iam\_assumable\_role\_aws\_ebs\_csi\_driver](#module\_iam\_assumable\_role\_aws\_ebs\_csi\_driver) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_aws_load_balancer_controller"></a> [iam\_assumable\_role\_aws\_load\_balancer\_controller](#module\_iam\_assumable\_role\_aws\_load\_balancer\_controller) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_cert_manager"></a> [iam\_assumable\_role\_cert\_manager](#module\_iam\_assumable\_role\_cert\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_cluster_autoscaler"></a> [iam\_assumable\_role\_cluster\_autoscaler](#module\_iam\_assumable\_role\_cluster\_autoscaler) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_external_dns"></a> [iam\_assumable\_role\_external\_dns](#module\_iam\_assumable\_role\_external\_dns) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_log_shipping"></a> [iam\_assumable\_role\_log\_shipping](#module\_iam\_assumable\_role\_log\_shipping) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_phlare"></a> [iam\_assumable\_role\_phlare](#module\_iam\_assumable\_role\_phlare) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.4.0 |
-| <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 5.9.2 |
+| <a name="module_iam_assumable_role_aws_ebs_csi_driver"></a> [iam\_assumable\_role\_aws\_ebs\_csi\_driver](#module\_iam\_assumable\_role\_aws\_ebs\_csi\_driver) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_aws_load_balancer_controller"></a> [iam\_assumable\_role\_aws\_load\_balancer\_controller](#module\_iam\_assumable\_role\_aws\_load\_balancer\_controller) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_cert_manager"></a> [iam\_assumable\_role\_cert\_manager](#module\_iam\_assumable\_role\_cert\_manager) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_cluster_autoscaler"></a> [iam\_assumable\_role\_cluster\_autoscaler](#module\_iam\_assumable\_role\_cluster\_autoscaler) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_external_dns"></a> [iam\_assumable\_role\_external\_dns](#module\_iam\_assumable\_role\_external\_dns) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_log_shipping"></a> [iam\_assumable\_role\_log\_shipping](#module\_iam\_assumable\_role\_log\_shipping) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_phlare"></a> [iam\_assumable\_role\_phlare](#module\_iam\_assumable\_role\_phlare) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
+| <a name="module_iam_assumable_role_velero"></a> [iam\_assumable\_role\_velero](#module\_iam\_assumable\_role\_velero) | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 6.4.0 |
 | <a name="module_main"></a> [main](#module\_main) | terraform-aws-modules/eks/aws | ~> 21.3.1 |
 
 ## Resources
